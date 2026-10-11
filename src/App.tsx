@@ -314,7 +314,7 @@ export default function App() {
 
   const playPageTurnSound = useCallback(
 
-    (direction: TurnDirection) => {
+    () => {
 
       if (!pageTurnSoundEnabled) return;
 
@@ -372,7 +372,7 @@ export default function App() {
 
 
 
-    playPageTurnSound(direction);
+    playPageTurnSound();
 
     setTurnAnimation({ from: activeSpread, to: nextIndex, direction });
 

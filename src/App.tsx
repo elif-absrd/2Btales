@@ -154,12 +154,12 @@ export default function App() {
   const totalPages = spreadCount * 2;
   const shownPageStart = activeSpread * 2 + 1;
 
-  const playPageTurnSound = useCallback(
-    (direction: TurnDirection) => {
-      if (!pageTurnSoundEnabled) return;
+  const playPageTurnSound = useCallback((direction: TurnDirection) => {
+    if (!pageTurnSoundEnabled) return;
+    void direction;
     try {
       const audio = new Audio('/sounds/page-turn.mp3');
-      audio.volume = 0.90;
+      audio.volume = 0.0;
       void audio.play().catch(() => {});
     } catch {
       // Audio is decorative; unsupported or blocked audio must not prevent page turns.

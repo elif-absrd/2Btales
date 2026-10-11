@@ -1,5 +1,5 @@
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'CS Claire Mono', monospace;
   color: #3d3026;
   background: #f6f0e6;
   font-synthesis: none;
@@ -15,8 +15,8 @@
   --rust-dark: #87432e;
   --olive: #777b5a;
   --gold: #c69a5c;
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --hand: 'Caveat', cursive;
+  --serif: 'CS Claire Mono', monospace;
+  --hand: 'CS Claire Mono', monospace;
 }
 
 * { box-sizing: border-box; }
@@ -2890,4 +2890,878 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .page-turn-button--side,
   .page-sound-toggle { transition: none !important; }
+}
+
+
+/* --------------------------------------------------------------------------
+   CURLY TALES — personal camera refresh
+   Keeps CS Claire Mono throughout. App behavior and scrapbook templates stay
+   unchanged; these rules refine only the presentation.
+   -------------------------------------------------------------------------- */
+:root {
+  font-family: 'CS Claire Mono', monospace;
+  --cream: #f3e8d5;
+  --paper: #fff8e9;
+  --paper-deep: #e8d5b7;
+  --ink: #33251b;
+  --muted: #806d59;
+  --line: #d8c2a0;
+  --rust: #a94f32;
+  --rust-dark: #773d2a;
+  --olive: #6c7250;
+  --gold: #bf9557;
+  --serif: 'CS Claire Mono', monospace;
+  --hand: 'CS Claire Mono', monospace;
+}
+
+html, body, button, input, select, textarea,
+*, *::before, *::after {
+  font-family: 'CS Claire Mono', monospace !important;
+}
+
+.app-shell {
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 14% 5%, rgba(255,255,255,.78), transparent 35%),
+    radial-gradient(ellipse at 89% 44%, rgba(191,149,87,.10), transparent 38%),
+    var(--cream);
+}
+.app-shell::before { opacity: .10; }
+.site-header {
+  height: 88px;
+  padding: 0 clamp(20px, 5vw, 76px);
+  border-bottom-color: rgba(118, 78, 44, .22);
+  background: rgba(247, 238, 220, .72);
+}
+.brand-wordmark {
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  color: #3a2b20;
+}
+.brand-wordmark em { color: var(--rust); }
+.nav-link {
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #7b6853;
+}
+.nav-link.active::after { width: 28px; height: 2px; background: var(--rust); }
+.nav-count {
+  border-radius: 2px;
+  background: #e6d4b6;
+  color: #58442e;
+}
+
+.booth-view {
+  max-width: 1320px;
+  padding: 0 clamp(18px, 4vw, 56px) 72px;
+}
+.page-heading--camera {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(220px, .65fr);
+  align-items: end;
+  column-gap: clamp(24px, 4vw, 60px);
+  row-gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(36px, 4vw, 54px) 0 8px;
+  text-align: left;
+}
+.page-heading--camera .eyebrow {
+  grid-column: 1 / -1;
+  color: #946447;
+  font-size: 9px;
+  letter-spacing: .13em;
+  justify-content: flex-start;
+}
+.page-heading--camera .eyebrow-line { width: 30px; background: var(--rust); }
+.page-heading--camera h1 {
+  grid-column: 1;
+  margin: 3px 0 0;
+  max-width: 620px;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: clamp(34px, 4vw, 53px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -.07em;
+  color: #31251b;
+}
+.page-heading--camera h1 em { color: var(--rust); font-style: normal; }
+.page-heading--camera p {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+  max-width: 300px;
+  margin: 0 0 5px;
+  color: #806b55;
+  font-size: 11px;
+  line-height: 1.9;
+  letter-spacing: -.015em;
+}
+
+.booth-layout {
+  grid-template-columns: minmax(0, 1.18fr) minmax(285px, .72fr);
+  gap: clamp(28px, 5vw, 68px);
+  max-width: 1100px;
+  margin: 25px auto 0;
+  align-items: start;
+}
+.camera-card {
+  position: relative;
+  min-width: 0;
+  padding: clamp(13px, 1.6vw, 19px);
+  border: 1px solid #cdb28e;
+  background: #f5e9d4;
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 249, 232, .8),
+    inset 0 0 0 5px rgba(181, 139, 82, .18),
+    0 20px 38px rgba(68, 47, 29, .10);
+}
+.camera-card-top {
+  padding: 2px 3px 13px;
+  color: #876d51;
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+.camera-live-dot {
+  width: 6px;
+  height: 6px;
+  background: #ab4c31;
+  box-shadow: 0 0 0 3px rgba(169, 79, 50, .12);
+}
+.camera-viewfinder {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-height: 285px;
+  background: #7f8067;
+  border: 1px solid #bda47f;
+  box-shadow: inset 0 0 0 6px rgba(255, 246, 222, .18);
+}
+.camera-viewfinder--live { background: #4c493b; }
+.camera-placeholder {
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(228, 212, 177, .22), transparent 57%),
+    repeating-linear-gradient(0deg, rgba(45, 38, 25, .026) 0 1px, transparent 1px 4px),
+    #85836b;
+}
+.camera-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 17px;
+  border: 1px solid rgba(255, 245, 220, .18);
+  pointer-events: none;
+}
+.camera-placeholder > * { z-index: 1; }
+.viewfinder-corners { inset: 25px; }
+.viewfinder-corners i { width: 17px; height: 17px; border-color: rgba(255, 247, 224, .78); }
+.placeholder-message {
+  top: 50%;
+  width: min(300px, 82%);
+  gap: 12px;
+  color: #f7edd8;
+  transform: translate(-50%, -50%);
+  text-shadow: none;
+}
+.placeholder-message svg { width: 25px; height: 25px; opacity: .92; }
+.placeholder-message strong {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -.035em;
+}
+.placeholder-message span {
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 10px;
+  line-height: 1.8;
+  color: rgba(250, 239, 217, .8);
+}
+.viewfinder-date {
+  right: 25px;
+  bottom: 24px;
+  font-size: 7px;
+  letter-spacing: .1em;
+}
+.camera-controls {
+  gap: 9px;
+  padding: 17px 0 3px;
+}
+.button {
+  min-height: 43px;
+  border-radius: 1px;
+  padding-inline: 15px;
+  font-size: 10px;
+  letter-spacing: -.02em;
+}
+.button-primary {
+  color: #fff7e6;
+  background: #9f4c32;
+  border-color: #87402a;
+  box-shadow: inset 0 -3px 0 rgba(62, 31, 20, .22), 0 4px 11px rgba(89, 49, 29, .12);
+}
+.button-primary:hover:not(:disabled) { background: #7e3c29; }
+.button-outline {
+  color: #684b34;
+  border-color: #ccb18d;
+  background: rgba(255, 248, 232, .76);
+}
+.button-outline:hover:not(:disabled) { background: #fff8e9; border-color: #ad8056; }
+.shutter-button { min-width: 158px; }
+.shutter-ring { width: 16px; height: 16px; }
+
+.booth-side-panel { padding-top: 7px; }
+.side-panel-heading .eyebrow {
+  color: #946447;
+  font-size: 8px;
+  letter-spacing: .15em;
+}
+.side-panel-heading h2 {
+  margin: 13px 0 10px;
+  font-size: clamp(23px, 2.2vw, 29px);
+  line-height: 1.35;
+  letter-spacing: -.065em;
+  font-weight: 500;
+  color: #37271d;
+}
+.side-panel-heading h2 em { color: var(--rust); font-style: normal; }
+.side-panel-heading p {
+  max-width: 330px;
+  margin-bottom: 20px;
+  color: #88735c;
+  font-size: 10px;
+  line-height: 1.9;
+}
+.filter-list { gap: 8px; }
+.filter-option {
+  min-height: 63px;
+  padding: 9px 10px;
+  gap: 12px;
+  border: 1px solid rgba(201, 175, 139, .28);
+  background: rgba(255, 249, 236, .55);
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.filter-option:hover { transform: translateX(2px); background: rgba(255, 250, 239, .9); }
+.filter-option.selected {
+  border-color: #bf9368;
+  background: #fff5e4;
+  box-shadow: inset 3px 0 0 #a94f32, 0 4px 12px rgba(82, 54, 29, .055);
+}
+.filter-swatch { width: 44px; height: 43px; flex-basis: 44px; }
+.filter-copy { gap: 5px; }
+.filter-copy strong { color: #4e3929; font-size: 10px; font-weight: 500; }
+.filter-copy small { color: #937b60; font-size: 8px; line-height: 1.4; }
+.filter-number { width: 20px; height: 20px; color: #a99173; font-size: 10px; }
+.filter-check { width: 20px; height: 20px; background: #e0e2cb; color: #697049; }
+.button-book-link {
+  display: inline-flex;
+  gap: 9px;
+  margin-top: 17px;
+  padding: 9px 0;
+  min-height: 34px;
+  color: #a04c31;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(169, 79, 50, .35);
+}
+.button-book-link:hover { color: #6f3826; }
+
+.recent-strip {
+  max-width: 1100px;
+  margin: 42px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid rgba(168, 130, 84, .3);
+}
+.recent-strip-heading { margin-bottom: 17px; }
+.recent-strip-heading .eyebrow { font-size: 8px; letter-spacing: .14em; }
+.recent-strip-heading h2 {
+  margin: 9px 0 0;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -.05em;
+  color: #3a2a1e;
+}
+.text-link { color: #99563a; font-size: 9px; }
+.thumbnail-row { gap: 13px; }
+.thumbnail {
+  padding: 5px 5px 17px;
+  width: 96px;
+  height: 112px;
+  flex-basis: 96px;
+  background: #fff9ec;
+  border-color: #d8c6ab;
+  box-shadow: 0 5px 12px rgba(61, 43, 26, .08);
+}
+.thumbnail img { border: 1px solid rgba(140, 106, 68, .14); }
+.thumbnail-add {
+  width: 96px;
+  height: 112px;
+  flex-basis: 96px;
+  gap: 8px;
+  border-color: #c9ac84;
+  color: #966548;
+  background: rgba(250, 241, 223, .45);
+  font-size: 8px;
+  letter-spacing: -.02em;
+}
+.thumbnail-add:hover { background: #fff6e6; }
+
+/* The book shares the same font and paper palette, without the repeated storage notices. */
+.book-heading-copy h1,
+.book-heading h1,
+.book-title-input,
+.book-meta,
+.page-count,
+.page-sound-toggle,
+.page-design-copy,
+.page-template-select-label,
+.book-bottom-note,
+.mobile-footer {
+  font-family: 'CS Claire Mono', monospace !important;
+}
+.book-heading-copy h1 { letter-spacing: -.065em; }
+.book-title-input { font-family: 'CS Claire Mono', monospace !important; }
+.book-meta { color: #8d765b; }
+.book-bottom-note { justify-content: flex-start; color: #8d765b; font-size: 9px; }
+.mobile-footer { color: #8d765b; }
+
+@media (max-width: 760px) {
+  .site-header { height: 76px; padding: 0 16px; }
+  .brand-wordmark { font-size: 21px; }
+  .main-nav { gap: 13px; }
+  .nav-link { font-size: 8px; letter-spacing: -.03em; }
+  .page-heading--camera {
+    display: block;
+    text-align: center;
+    padding: 31px 2px 2px;
+  }
+  .page-heading--camera .eyebrow { justify-content: center; }
+  .page-heading--camera h1 {
+    font-size: clamp(30px, 8vw, 43px);
+    line-height: 1.2;
+    margin: 12px 0 8px;
+  }
+  .page-heading--camera p { max-width: 320px; margin: 0 auto; font-size: 9px; }
+  .booth-view { padding: 0 15px 45px; }
+  .booth-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 24px; }
+  .camera-card { padding: 12px; }
+  .camera-viewfinder { min-height: 0; aspect-ratio: 4 / 3; }
+  .camera-controls { gap: 7px; }
+  .button { min-height: 40px; padding-inline: 11px; font-size: 9px; }
+  .shutter-button { min-width: 0; }
+  .booth-side-panel { padding: 2px 1px 0; }
+  .side-panel-heading h2 { font-size: 24px; }
+  .side-panel-heading p { max-width: 360px; }
+  .filter-option { min-height: 59px; }
+  .recent-strip { margin-top: 32px; }
+  .recent-strip-heading h2 { font-size: 19px; }
+  .recent-strip-heading .text-link { font-size: 8px; white-space: nowrap; }
+}
+
+@media (max-width: 390px) {
+  .site-header { padding-inline: 11px; }
+  .brand-wordmark { font-size: 18px; }
+  .main-nav { gap: 8px; }
+  .nav-link { font-size: 7px; }
+  .nav-count { width: 16px; height: 16px; margin-left: 3px; font-size: 8px; }
+  .camera-controls { flex-direction: column; align-items: stretch; }
+  .camera-controls .button { width: 100%; }
+}
+
+
+/* Curly Tales: compact, aligned scrapbook header and calmer book controls. */
+:root {
+  font-family: 'CS Claire Mono', monospace;
+  --serif: 'CS Claire Mono', monospace;
+  --hand: 'CS Claire Mono', monospace;
+  --sans: 'CS Claire Mono', monospace;
+}
+
+.site-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 24px !important;
+  width: 100%;
+  height: 76px !important;
+  min-height: 76px !important;
+  padding: 0 clamp(22px, 4.8vw, 76px) !important;
+  background: rgba(248, 240, 224, .76) !important;
+  border-bottom: 1px solid rgba(112, 78, 48, .18) !important;
+  box-shadow: 0 4px 18px rgba(76, 53, 33, .025) !important;
+  backdrop-filter: blur(8px);
+}
+
+.brand {
+  order: 0;
+  flex: 0 0 auto;
+  margin: 0 auto 0 0 !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  justify-self: auto !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.brand-wordmark {
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: clamp(21px, 1.8vw, 27px) !important;
+  font-weight: 500 !important;
+  letter-spacing: -.075em !important;
+  line-height: 1.1 !important;
+}
+
+.brand-wordmark em {
+  margin-left: 2px;
+  color: #a84e31 !important;
+  font-style: italic;
+}
+
+.main-nav {
+  order: 1;
+  flex: 0 0 auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  height: 100% !important;
+  margin-left: auto !important;
+  gap: clamp(16px, 2.5vw, 34px) !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+
+.nav-link {
+  height: 100% !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase;
+  color: #806b55 !important;
+}
+
+.nav-link:hover,
+.nav-link.active { color: #9c4c31 !important; }
+
+.nav-link.active::after {
+  bottom: 0 !important;
+  width: 24px !important;
+  height: 2px !important;
+  border-radius: 0 !important;
+  background: #a84e31 !important;
+}
+
+.nav-count {
+  width: 19px !important;
+  height: 19px !important;
+  margin-left: 8px !important;
+  background: #e9d9bd !important;
+  border: 1px solid rgba(151, 109, 66, .16);
+  color: #72523a !important;
+  font-size: 9px !important;
+}
+
+/* The back link now sits quietly in the upper-left corner of the book section. */
+.book-view {
+  max-width: 1780px !important;
+  margin: 0 auto !important;
+  padding: 18px clamp(22px, 2.2vw, 42px) 66px !important;
+}
+
+.book-heading {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: clamp(20px, 4vw, 58px) !important;
+  padding-top: 40px !important;
+  margin: 0 !important;
+}
+
+.book-back-link {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  margin: 0 !important;
+  min-height: 24px;
+  padding: 2px 0 !important;
+  gap: 7px !important;
+  color: #8a7157 !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: .01em !important;
+  transition: color .18s ease, transform .18s ease;
+}
+
+.book-back-link:hover {
+  color: #a84e31 !important;
+  transform: translateX(-2px);
+}
+
+.book-heading-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.book-heading-copy > .eyebrow { display: none !important; }
+
+.book-heading-copy h1,
+.book-heading h1 {
+  margin: 0 0 7px !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: clamp(35px, 3.6vw, 51px) !important;
+  font-weight: 500 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.075em !important;
+  color: #39291e !important;
+}
+
+.book-heading-copy h1 em { color: #a84e31 !important; font-weight: 500 !important; }
+
+.book-heading-copy p {
+  max-width: 510px;
+  margin: 0 !important;
+  color: #89735d !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 10px !important;
+  line-height: 1.8 !important;
+  letter-spacing: -.02em;
+}
+
+.book-actions {
+  flex: 0 0 auto;
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  padding: 0 0 4px !important;
+}
+
+.book-actions .button {
+  min-height: 38px !important;
+  padding: 0 13px !important;
+  gap: 8px !important;
+  border-radius: 2px !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  letter-spacing: -.025em;
+  box-shadow: none;
+}
+
+.book-actions .button-primary {
+  background: #9f4e32 !important;
+  border-color: #9f4e32 !important;
+  box-shadow: 0 2px 0 #793a27 !important;
+}
+
+.book-actions .button-primary:hover:not(:disabled) {
+  background: #87412d !important;
+  border-color: #87412d !important;
+  transform: translateY(-1px);
+}
+
+.book-actions .button-outline {
+  background: rgba(255, 250, 241, .56) !important;
+  border-color: #d7c1a3 !important;
+  color: #73563f !important;
+}
+
+.book-actions .button-outline:hover:not(:disabled) {
+  background: #fff9ee !important;
+  border-color: #b98b5f !important;
+}
+
+.book-title-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  width: 100%;
+  max-width: none !important;
+  margin: 20px 0 18px !important;
+  padding: 0 0 12px !important;
+  border-bottom: 1px solid rgba(151, 116, 78, .22);
+}
+
+.book-title-input-wrap { min-width: 0 !important; }
+
+.book-title-input {
+  width: min(480px, 58vw) !important;
+  padding: 0 0 6px 24px !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: clamp(17px, 1.65vw, 22px) !important;
+  font-weight: 500 !important;
+  letter-spacing: -.045em !important;
+  line-height: 1.35 !important;
+  color: #a84e31 !important;
+}
+
+.title-pencil { top: 2px !important; font-size: 15px !important; color: #ab815d !important; }
+.title-rule { width: 100% !important; background: linear-gradient(90deg, #b98b61, rgba(226, 204, 172, .25)) !important; }
+
+.book-meta {
+  flex: 0 0 auto;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0 1px 5px 0 !important;
+  gap: 8px !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 8px !important;
+  letter-spacing: .015em;
+  color: #8e785f !important;
+}
+
+.book-meta .status-dot { width: 5px; height: 5px; box-shadow: 0 0 0 3px rgba(120, 126, 88, .1); }
+
+.page-design-controls {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px 24px !important;
+  margin: 0 0 20px !important;
+  padding: 13px 16px !important;
+  border: 1px solid rgba(180, 145, 105, .35) !important;
+  border-radius: 2px !important;
+  background: rgba(255, 250, 241, .38) !important;
+  box-shadow: none !important;
+}
+
+.page-design-copy { display: flex; flex-direction: column; gap: 4px !important; }
+.page-design-copy .eyebrow { margin: 0 !important; font-size: 7px !important; letter-spacing: .16em !important; color: #a56643 !important; }
+.page-design-copy strong {
+  color: #4b3526 !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: clamp(13px, 1.2vw, 16px) !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -.045em !important;
+}
+.page-design-copy small { color: #90775d !important; font-size: 8px !important; line-height: 1.55 !important; }
+
+.page-design-mode {
+  justify-self: end !important;
+  display: inline-flex !important;
+  flex: 0 0 auto;
+  padding: 3px !important;
+  gap: 3px !important;
+  border: 1px solid #ddc8ab !important;
+  background: rgba(239, 226, 206, .7) !important;
+}
+
+.page-design-mode button {
+  min-height: 35px;
+  padding: 0 12px !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #80674f !important;
+  font-family: 'CS Claire Mono', monospace !important;
+  font-size: 8px !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+}
+
+.page-design-mode button.selected {
+  color: #fff7ea !important;
+  background: #76503a !important;
+  box-shadow: 0 2px 4px rgba(54, 35, 22, .12) !important;
+}
+
+.page-template-selectors { padding-top: 12px !important; border-top-color: rgba(151, 116, 78, .22) !important; }
+.page-template-select-label { font-family: 'CS Claire Mono', monospace !important; font-size: 8px !important; }
+.page-template-select-label select { font-family: 'CS Claire Mono', monospace !important; font-size: 9px !important; }
+
+.book-stage-wrap {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  border-radius: 2px;
+  box-shadow: 0 18px 38px rgba(55, 38, 23, .16), inset 0 0 0 1px rgba(30, 42, 29, .55) !important;
+}
+
+.book-stage-decoration { opacity: .5; }
+.book-bottom-note { max-width: 1280px; margin: 10px auto 0 !important; font-family: 'CS Claire Mono', monospace !important; font-size: 8px !important; }
+.page-turn-footer { max-width: 1280px !important; }
+.page-count, .page-sound-toggle { font-family: 'CS Claire Mono', monospace !important; }
+
+@media (max-width: 1000px) {
+  .book-heading { align-items: flex-start !important; gap: 18px !important; }
+  .book-heading-copy h1 { font-size: clamp(33px, 4.5vw, 44px) !important; }
+  .book-actions { max-width: 45%; gap: 6px !important; }
+  .book-actions .button { padding-inline: 9px !important; }
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    height: 66px !important;
+    min-height: 66px !important;
+    padding: 0 16px !important;
+    gap: 12px !important;
+  }
+  .brand-wordmark { font-size: 18px !important; }
+  .main-nav { gap: 12px !important; }
+  .nav-link { font-size: 7px !important; letter-spacing: .02em !important; }
+  .nav-count { width: 16px !important; height: 16px !important; margin-left: 4px !important; font-size: 8px !important; }
+  .book-view { padding: 15px 15px 42px !important; }
+  .book-heading { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 15px !important; padding-top: 37px !important; }
+  .book-back-link { top: 0 !important; }
+  .book-heading-copy h1 { font-size: clamp(30px, 8.3vw, 40px) !important; line-height: 1.18 !important; }
+  .book-heading-copy p { font-size: 9px !important; }
+  .book-actions { max-width: none !important; width: 100%; justify-content: flex-start !important; flex-wrap: wrap; gap: 6px !important; }
+  .book-actions .button { flex: 1 1 auto; min-height: 36px !important; font-size: 8px !important; }
+  .book-title-row { flex-direction: row !important; align-items: center !important; margin: 17px 0 14px !important; gap: 8px !important; }
+  .book-title-input { width: min(64vw, 320px) !important; font-size: 16px !important; }
+  .book-meta { font-size: 7px !important; gap: 5px !important; white-space: nowrap; }
+  .page-design-controls { grid-template-columns: minmax(0, 1fr) !important; gap: 11px !important; padding: 12px !important; margin-bottom: 14px !important; }
+  .page-design-copy strong { font-size: 13px !important; }
+  .page-design-copy small { font-size: 8px !important; }
+  .page-design-mode { justify-self: stretch !important; width: 100%; }
+  .page-design-mode button { flex: 1 1 0; min-width: 0; padding: 0 7px !important; font-size: 7px !important; }
+  .page-template-selectors { grid-template-columns: 1fr 1fr !important; gap: 7px !important; }
+  .book-stage-wrap { margin-top: 2px !important; }
+}
+
+@media (max-width: 390px) {
+  .brand-wordmark { font-size: 16px !important; }
+  .main-nav { gap: 8px !important; }
+  .nav-link { font-size: 6.5px !important; }
+  .book-title-row { align-items: flex-start !important; }
+  .book-meta { white-space: normal; text-align: right; }
+}
+
+
+/* Mobile photo booth: keep camera controls usable and let people switch lenses. */
+.camera-controls { flex-wrap: wrap; }
+.camera-switch-button { min-width: 0; }
+@media (max-width: 600px) {
+  .camera-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .camera-controls .shutter-button { grid-column: 1 / -1; width: 100%; }
+  .camera-controls .camera-switch-button,
+  .camera-controls .upload-button { width: 100%; padding-inline: 9px; font-size: 10px; }
+}
+
+/* Print/PDF: one complete portrait scrapbook design per sheet. This avoids
+   squeezing a two-page landscape spread into the phone's portrait PDF output. */
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  html, body, .app-shell {
+    width: 210mm !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fffaf1 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body * { visibility: hidden !important; }
+  .print-book, .print-book * { visibility: visible !important; }
+  .print-book {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #352a21 !important;
+    background: #fffaf1 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print-cover {
+    display: flex !important;
+    position: relative !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    box-sizing: border-box !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    border: 1px solid #d6c1a3 !important;
+    outline: 1px solid #d6c1a3 !important;
+    outline-offset: -7mm !important;
+    background: #f3e8d6 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print-cover-kicker { font: 9pt 'CS Claire Mono', monospace !important; letter-spacing: 3px !important; margin-bottom: 24mm !important; }
+  .print-cover h1 { font: 30pt 'CS Claire Mono', monospace !important; font-weight: 500 !important; margin: 8mm 0 4mm !important; }
+  .print-cover p { font: 11pt 'CS Claire Mono', monospace !important; color: #806b56 !important; }
+  .print-cover > span { font-size: 26pt !important; margin-top: 20mm !important; color: #a5482b !important; }
+  .print-page-sheet {
+    position: relative !important;
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    background: #fffaf1 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print-page-heading {
+    position: absolute !important;
+    z-index: 5 !important;
+    top: 5mm !important;
+    left: 7mm !important;
+    right: 7mm !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    color: #8d765e !important;
+    font: 6.5pt 'CS Claire Mono', monospace !important;
+    letter-spacing: .4px !important;
+  }
+  .print-page-number {
+    position: absolute !important;
+    z-index: 5 !important;
+    right: 7mm !important;
+    bottom: 4mm !important;
+    color: #8d765e !important;
+    font: 6pt 'CS Claire Mono', monospace !important;
+  }
+  .print-page-sheet .paper-page--template {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    background: #fffaf1 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  .print-page-sheet .template-page-canvas {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    width: min(100%, 167.06mm) !important;
+    height: 297mm !important;
+    aspect-ratio: 9 / 16 !important;
+    transform: translateX(-50%) !important;
+    overflow: hidden !important;
+    background: #fffaf1 !important;
+  }
+  .print-page-sheet .template-photo-slot img { object-fit: cover !important; }
+  .print-page-sheet .page-template-overlay { width: 100% !important; height: 100% !important; object-fit: fill !important; }
+  .print-page-sheet .template-photo-actions,
+  .print-page-sheet .no-print { display: none !important; }
+  .book-spread--print { display: none !important; }
 }

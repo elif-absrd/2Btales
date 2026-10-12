@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ChangeEvent } from 'react';
 
@@ -22,7 +22,6 @@ import {
 
   Leaf,
 
-
   Plus,
 
   RefreshCw,
@@ -41,126 +40,146 @@ import { getAllPhotos, getMeta, putMeta, putPhoto, putPhotos, removePhoto } from
 
 import type { PhotoFilter, PhotoRecord, PhotoView } from './types';
 
-
-
 type View = 'booth' | 'book';
-type CameraFacingMode = 'user' | 'environment';
 
 type PageTemplateId = 'autumn-memory' | 'music-collage' | 'vinyl-pop' | 'webhead';
-
 type PageTemplateMode = 'auto' | 'manual';
 
-type TemplateSlot = { left: number; top: number; width: number; height: number };
+type TemplateSlot = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  rotation?: number;
+};
 
 type PageTemplate = { id: PageTemplateId; name: string; src: string; slots: TemplateSlot[] };
-
 type ResolvedPage = { pageIndex: number; template: PageTemplate; photos: PhotoView[] };
-
 type TurnDirection = 'next' | 'previous';
-
 type TurnAnimation = { from: number; to: number; direction: TurnDirection } | null;
 
-
-
+// Slot coordinates are measured from the transparent photo cut-outs in the supplied PNGs.
+// The art layer stays above each photo so all frames, stickers and borders remain visible.
 const PAGE_TEMPLATES: PageTemplate[] = [
-
   {
-
-    id: 'autumn-memory', name: 'Autumn keepsake', src: '/templates/autumn-memory.png',
-
+    id: 'autumn-memory',
+    name: 'Autumn keepsake',
+    src: '/templates/autumn-memory.png',
     slots: [
-
-      { left: 31.3, top: 12.5, width: 58.5, height: 26.2 },
-
-      { left: 8, top: 36.5, width: 43.6, height: 25.7 },
-
-      { left: 58.3, top: 56.5, width: 19.7, height: 15.6 },
-
+      { left: 32.4, top: 13.0, width: 56.1, height: 23.25 },
+      { left: 8.0, top: 36.3, width: 43.4, height: 25.8 },
+      { left: 58.4, top: 56.5, width: 19.7, height: 15.7 },
     ],
-
   },
-
   {
-
-    id: 'music-collage', name: 'Music & memories', src: '/templates/music-collage.png',
-
+    id: 'music-collage',
+    name: 'Music & memories',
+    src: '/templates/music-collage.png',
     slots: [
-
-      { left: 3.8, top: 1.1, width: 42.8, height: 26.8 },
-
+      { left: 4.3, top: 1.3, width: 41.3, height: 26.5 },
       { left: 6.4, top: 32.2, width: 35.1, height: 25.5 },
-
-      { left: 59.5, top: 49.3, width: 25.1, height: 11.8 },
-
-      { left: 35.4, top: 78, width: 26.2, height: 12.2 },
-
+      { left: 62.3, top: 50.0, width: 22.2, height: 10.95 },
+      { left: 36.8, top: 78.0, width: 24.9, height: 12.2 },
     ],
+  },
+  {
+    id: 'vinyl-pop',
+    name: 'Vinyl & pop',
+    src: '/templates/vinyl-pop.png',
+    slots: [
+      { left: 32.1, top: 11.8, width: 38.9, height: 24.0 },
+      { left: 47.8, top: 39.0, width: 41.5, height: 19.8 },
+      { left: 31.25, top: 67.3, width: 34.5, height: 18.0 },
+    ],
+  },
+  {
+    id: 'webhead',
+    name: 'Spider-Man comic',
+    src: '/templates/webhead.png',
+    slots: [
+      { left: 4.0, top: 2.25, width: 44.1, height: 25.4 },
+      { left: 33.8, top: 33.5, width: 29.2, height: 26.2 },
+      { left: 51.7, top: 62.45, width: 43.2, height: 25.0 },
+    ],
+  },
+];
+
+const AUTO_TEMPLATE_SEQUENCE: PageTemplateId[] = [
+  'autumn-memory',
+  'music-collage',
+  'vinyl-pop',
+  'webhead',
+];
+
+const TEMPLATE_BY_ID = Object.fromEntries(
+  PAGE_TEMPLATES.map(template => [template.id, template]),
+) as Record<PageTemplateId, PageTemplate>;
+
+const FILTERS: { id: PhotoFilter; name: string; description: string; css: string; image: string }[] = [
+
+  {
+
+    id: 'autumn',
+
+    name: 'Autumn haze',
+
+    description: 'Warm & soft',
+
+    css: 'sepia(.20) saturate(.90) contrast(.96) brightness(1.03)',
+
+    image: '/assets/filter1.jpg',
 
   },
 
   {
 
-    id: 'vinyl-pop', name: 'Vinyl & pop', src: '/templates/vinyl-pop.png',
+    id: 'sepia',
 
-    slots: [
+    name: 'Old film',
 
-      { left: 31.7, top: 11.8, width: 40.5, height: 23.9 },
+    description: 'Golden sepia',
 
-      { left: 47.8, top: 39, width: 42.7, height: 19.9 },
+    css: 'sepia(.58) saturate(.78) contrast(.96) brightness(1.03)',
 
-      { left: 31.25, top: 67.3, width: 34.4, height: 17.9 },
-
-    ],
+    image: '/assets/filter2.jpg',
 
   },
 
   {
 
-    id: 'webhead', name: 'Comic book', src: '/templates/webhead.png',
+    id: 'faded',
 
-    slots: [
+    name: 'Faded days',
 
-      { left: 4, top: 2.25, width: 44.1, height: 25.3 },
+    description: 'Quiet & matte',
 
-      { left: 33.8, top: 33.5, width: 29.1, height: 26.1 },
+    css: 'sepia(.16) saturate(.72) contrast(.82) brightness(1.10)',
 
-      { left: 51.7, top: 62.45, width: 43.1, height: 24.9 },
+    image: '/assets/filter3.jpg',
 
-    ],
+  },
+
+  {
+
+    id: 'moss',
+
+    name: 'Moss & pine',
+
+    description: 'Earthy greens',
+
+    css: 'sepia(.10) saturate(.78) hue-rotate(9deg) contrast(.94)',
+
+    image: '/assets/filter4.jpg',
 
   },
 
 ];
-
-const AUTO_TEMPLATE_SEQUENCE: PageTemplateId[] = ['autumn-memory', 'music-collage', 'vinyl-pop', 'webhead'];
-
-const TEMPLATE_BY_ID = Object.fromEntries(PAGE_TEMPLATES.map(template => [template.id, template])) as Record<PageTemplateId, PageTemplate>;
-
-
-
-const FILTERS: { id: PhotoFilter; name: string; description: string; css: string }[] = [
-
-  { id: 'autumn', name: 'Autumn haze', description: 'Warm + soft', css: 'sepia(.20) saturate(.90) contrast(.96) brightness(1.03)' },
-
-  { id: 'sepia', name: 'Old film', description: 'Golden sepia', css: 'sepia(.58) saturate(.78) contrast(.96) brightness(1.03)' },
-
-  { id: 'faded', name: 'Faded days', description: 'Quiet + matte', css: 'sepia(.16) saturate(.72) contrast(.82) brightness(1.10)' },
-
-  { id: 'moss', name: 'Moss & pine', description: 'Earthy greens', css: 'sepia(.10) saturate(.78) hue-rotate(9deg) contrast(.94)' },
-
-];
-
-
-
-
 
 function filterStyle(filter: PhotoFilter) {
 
   return FILTERS.find(item => item.id === filter)?.css ?? FILTERS[0].css;
 
 }
-
-
 
 function toRecord(photo: PhotoView): PhotoRecord {
 
@@ -174,8 +193,6 @@ function toRecord(photo: PhotoView): PhotoRecord {
 
 }
 
-
-
 function newId() {
 
   return typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -186,15 +203,11 @@ function newId() {
 
 }
 
-
-
 function formattedDate(timestamp: number) {
 
   return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(timestamp);
 
 }
-
-
 
 export default function App() {
 
@@ -208,13 +221,13 @@ export default function App() {
 
   const [activeSpread, setActiveSpread] = useState(0);
 
-  const [turnAnimation, setTurnAnimation] = useState<TurnAnimation>(null);
-
-  const [pageTurnSoundEnabled, setPageTurnSoundEnabled] = useState(true);
-
   const [pageTemplateMode, setPageTemplateMode] = useState<PageTemplateMode>('auto');
 
   const [pageTemplateOverrides, setPageTemplateOverrides] = useState<Record<string, PageTemplateId>>({});
+
+  const [turnAnimation, setTurnAnimation] = useState<TurnAnimation>(null);
+
+  const [pageTurnSoundEnabled, setPageTurnSoundEnabled] = useState(true);
 
   const [filter, setFilter] = useState<PhotoFilter>('autumn');
 
@@ -223,8 +236,6 @@ export default function App() {
   const [cameraReady, setCameraReady] = useState(false);
 
   const [cameraBusy, setCameraBusy] = useState(false);
-
-  const [cameraFacingMode, setCameraFacingMode] = useState<CameraFacingMode>('user');
 
   const [storageReady, setStorageReady] = useState(false);
 
@@ -250,58 +261,37 @@ export default function App() {
 
   const bookStageRef = useRef<HTMLDivElement>(null);
 
-  const stageHeightLockedRef = useRef(false);
-
   const audioContextRef = useRef<AudioContext | null>(null);
 
-
-
   const resolvedPages = useMemo<ResolvedPage[]>(() => {
-
     const pages: ResolvedPage[] = [];
-
     let photoCursor = 0;
-
     let pageIndex = 0;
 
-    // A template's open frames determine how many photos fit on that page.
-
+    // Each page consumes the number of photos that fit its selected collage artwork.
     while (photoCursor < photos.length || pages.length < 2) {
-
-      const override = pageTemplateMode === 'manual' ? pageTemplateOverrides[String(pageIndex)] : undefined;
-
-      const templateId = override ?? AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
-
-      const template = TEMPLATE_BY_ID[templateId] ?? PAGE_TEMPLATES[pageIndex % PAGE_TEMPLATES.length];
-
+      const automaticId = AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
+      const templateId = pageTemplateMode === 'manual'
+        ? pageTemplateOverrides[String(pageIndex)] ?? automaticId
+        : automaticId;
+      const template = TEMPLATE_BY_ID[templateId] ?? TEMPLATE_BY_ID[automaticId];
       const pagePhotos = photos.slice(photoCursor, photoCursor + template.slots.length);
-
       pages.push({ pageIndex, template, photos: pagePhotos });
-
       photoCursor += template.slots.length;
-
       pageIndex += 1;
-
-      // Defensive guard in case a future template is accidentally configured with no slots.
-
       if (pageIndex > photos.length + 5) break;
-
     }
 
     if (pages.length % 2 !== 0) {
-
       const pageIndex = pages.length;
-
-      const override = pageTemplateMode === 'manual' ? pageTemplateOverrides[String(pageIndex)] : undefined;
-
-      const templateId = override ?? AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
-
-      pages.push({ pageIndex, template: TEMPLATE_BY_ID[templateId], photos: [] });
-
+      const automaticId = AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
+      const templateId = pageTemplateMode === 'manual'
+        ? pageTemplateOverrides[String(pageIndex)] ?? automaticId
+        : automaticId;
+      pages.push({ pageIndex, template: TEMPLATE_BY_ID[templateId] ?? TEMPLATE_BY_ID[automaticId], photos: [] });
     }
 
     return pages;
-
   }, [photos, pageTemplateMode, pageTemplateOverrides]);
 
   const spreadCount = Math.max(1, Math.ceil(resolvedPages.length / 2));
@@ -309,8 +299,6 @@ export default function App() {
   const totalPages = spreadCount * 2;
 
   const shownPageStart = activeSpread * 2 + 1;
-
-
 
   const playPageTurnSound = useCallback(
 
@@ -334,85 +322,27 @@ export default function App() {
 
   }, [pageTurnSoundEnabled]);
 
-
-
   const flipSpread = useCallback((direction: TurnDirection) => {
-
     if (turnAnimation || turnTimerRef.current !== null) return;
 
     const nextIndex = direction === 'next'
-
       ? Math.min(spreadCount - 1, activeSpread + 1)
-
       : Math.max(0, activeSpread - 1);
 
     if (nextIndex === activeSpread) return;
 
-
-
-    // Lock the current height before both spreads become positioned layers. This prevents the
-
-    // document from collapsing during the turn, which was causing the browser to jump upward.
-
-    const stage = bookStageRef.current;
-
-    if (stage) {
-
-      const stageHeight = Math.ceil(stage.getBoundingClientRect().height);
-
-      if (stageHeight > 0) {
-
-        stage.style.height = `${stageHeight}px`;
-
-        stageHeightLockedRef.current = true;
-
-      }
-
-    }
-
-
-
     playPageTurnSound();
-
     setTurnAnimation({ from: activeSpread, to: nextIndex, direction });
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     turnTimerRef.current = window.setTimeout(() => {
-
       setActiveSpread(nextIndex);
-
       setTurnAnimation(null);
-
       turnTimerRef.current = null;
-
     }, reducedMotion ? 80 : 880);
-
   }, [activeSpread, playPageTurnSound, spreadCount, turnAnimation]);
 
-
-
-  useLayoutEffect(() => {
-
-    // Release the temporary height after the new spread is back in normal document flow.
-
-    if (!turnAnimation && stageHeightLockedRef.current && bookStageRef.current) {
-
-      bookStageRef.current.style.height = '';
-
-      stageHeightLockedRef.current = false;
-
-    }
-
-  }, [activeSpread, turnAnimation]);
-
-
-
-
-
-  const showToast = useCallback((message: string) => setToast(message), []);
-
-
+const showToast = useCallback((message: string) => setToast(message), []);
 
   useEffect(() => {
 
@@ -421,8 +351,6 @@ export default function App() {
     return () => window.clearTimeout(timer);
 
   }, []);
-
-
 
   useEffect(() => {
 
@@ -433,8 +361,6 @@ export default function App() {
     return () => window.clearTimeout(timer);
 
   }, [introMinimumDone]);
-
-
 
   const attachPhotoUrls = useCallback((records: PhotoRecord[]) => {
 
@@ -470,8 +396,6 @@ export default function App() {
 
   }, []);
 
-
-
   const refreshPhotos = useCallback(async () => {
 
     const records = await getAllPhotos();
@@ -484,26 +408,17 @@ export default function App() {
 
   }, [attachPhotoUrls]);
 
-
-
   useEffect(() => {
 
     let cancelled = false;
 
     Promise.all([
-
       getAllPhotos(),
-
       getMeta<string>('bookTitle'),
-
       getMeta<number>('activeSpread'),
-
       getMeta<Record<string, PageTemplateId>>('pageTemplateOverrides'),
-
       getMeta<PageTemplateMode>('pageTemplateMode'),
-
     ])
-
       .then(([records, savedTitle, savedSpread, savedPageTemplates, savedTemplateMode]) => {
 
         if (cancelled) return;
@@ -517,21 +432,13 @@ export default function App() {
         if (savedTitle) setBookTitle(savedTitle === 'Our little autumn' ? 'Curly Tales' : savedTitle);
 
         if (typeof savedSpread === 'number') setActiveSpread(Math.min(Math.max(0, savedSpread), Math.max(0, records.length - 1)));
-
         if (savedPageTemplates && typeof savedPageTemplates === 'object') {
-
           const validOverrides: Record<string, PageTemplateId> = {};
-
           for (const [key, value] of Object.entries(savedPageTemplates)) {
-
-            if (value in TEMPLATE_BY_ID) validOverrides[key] = value as PageTemplateId;
-
+            if (PAGE_TEMPLATES.some(template => template.id === value)) validOverrides[key] = value as PageTemplateId;
           }
-
           setPageTemplateOverrides(validOverrides);
-
         }
-
         if (savedTemplateMode === 'auto' || savedTemplateMode === 'manual') setPageTemplateMode(savedTemplateMode);
 
         setStorageReady(true);
@@ -556,8 +463,6 @@ export default function App() {
 
       if (turnTimerRef.current !== null) window.clearTimeout(turnTimerRef.current);
 
-      if (bookStageRef.current) bookStageRef.current.style.height = '';
-
       if (audioContextRef.current && audioContextRef.current.state !== 'closed') void audioContextRef.current.close();
 
       streamRef.current?.getTracks().forEach(track => track.stop());
@@ -570,8 +475,6 @@ export default function App() {
 
   }, [attachPhotoUrls]);
 
-
-
   useEffect(() => {
 
     if (!toast) return;
@@ -582,15 +485,25 @@ export default function App() {
 
   }, [toast]);
 
-
-
   useEffect(() => {
 
     if (view === 'book') void putMeta('activeSpread', activeSpread).catch(() => undefined);
 
   }, [activeSpread, view]);
 
+  useEffect(() => {
+    if (!storageReady) return;
+    void putMeta('pageTemplateOverrides', pageTemplateOverrides).catch(() => undefined);
+  }, [pageTemplateOverrides, storageReady]);
 
+  useEffect(() => {
+    if (!storageReady) return;
+    void putMeta('pageTemplateMode', pageTemplateMode).catch(() => undefined);
+  }, [pageTemplateMode, storageReady]);
+
+  const choosePageTemplate = (pageIndex: number, templateId: PageTemplateId) => {
+    setPageTemplateOverrides(current => ({ ...current, [String(pageIndex)]: templateId }));
+  };
 
   useEffect(() => {
 
@@ -598,37 +511,7 @@ export default function App() {
 
   }, [spreadCount]);
 
-
-
-  useEffect(() => {
-
-    if (!storageReady) return;
-
-    void putMeta('pageTemplateOverrides', pageTemplateOverrides).catch(() => undefined);
-
-  }, [pageTemplateOverrides, storageReady]);
-
-
-
-  useEffect(() => {
-
-    if (!storageReady) return;
-
-    void putMeta('pageTemplateMode', pageTemplateMode).catch(() => undefined);
-
-  }, [pageTemplateMode, storageReady]);
-
-
-
-  const choosePageTemplate = (pageIndex: number, templateId: PageTemplateId) => {
-
-    setPageTemplateOverrides(current => ({ ...current, [String(pageIndex)]: templateId }));
-
-  };
-
-
-
-  useEffect(() => {
+useEffect(() => {
 
     if (view !== 'booth') {
 
@@ -642,15 +525,13 @@ export default function App() {
 
   }, [view]);
 
-
-
-  const startCamera = async (requestedFacingMode: CameraFacingMode = cameraFacingMode) => {
+  const startCamera = async () => {
 
     setError('');
 
     if (!navigator.mediaDevices?.getUserMedia) {
 
-      setError('Camera access is not available here. Open Curly Tales in a modern browser over HTTPS, or upload photos instead.');
+      setError('Camera access is not available here. Open the site in a modern browser over localhost or HTTPS, or upload photos instead.');
 
       return;
 
@@ -663,16 +544,10 @@ export default function App() {
     try {
 
       streamRef.current?.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
 
-      // `ideal` is more compatible across mobile Safari and Android browsers than `exact`.
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: requestedFacingMode } },
-        audio: false,
-      });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
 
       streamRef.current = stream;
-      setCameraFacingMode(requestedFacingMode);
 
       if (videoRef.current) {
 
@@ -686,13 +561,11 @@ export default function App() {
 
     } catch (reason) {
 
-      setCameraReady(false);
       setError(reason instanceof Error && reason.name === 'NotAllowedError'
 
         ? 'Camera permission was blocked. Allow camera access in your browser settings, or upload photos instead.'
-        : requestedFacingMode === 'environment'
-          ? 'The back camera could not be opened on this device. Try switching back to the front camera.'
-          : 'Could not open the camera. Check that it is connected and not being used by another app.');
+
+        : 'Could not open the camera. Check that it is connected and not being used by another app.');
 
     } finally {
 
@@ -701,13 +574,6 @@ export default function App() {
     }
 
   };
-
-  const switchCamera = async () => {
-    const nextFacingMode: CameraFacingMode = cameraFacingMode === 'user' ? 'environment' : 'user';
-    await startCamera(nextFacingMode);
-  };
-
-
 
   const createRecord = async (blob: Blob, caption = '') => {
 
@@ -730,8 +596,6 @@ export default function App() {
     return record;
 
   };
-
-
 
   const capturePhoto = async () => {
 
@@ -763,11 +627,9 @@ export default function App() {
 
     }
 
-    // Mirror only the front-facing camera so rear-camera photos keep their natural orientation.
-    if (cameraFacingMode === 'user') {
-      context.translate(canvas.width, 0);
-      context.scale(-1, 1);
-    }
+    context.translate(canvas.width, 0);
+
+    context.scale(-1, 1);
 
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -794,8 +656,6 @@ export default function App() {
     }, 'image/jpeg', 0.92);
 
   };
-
-
 
   const handleFiles = async (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -849,8 +709,6 @@ export default function App() {
 
   };
 
-
-
   const updateCaption = async (id: string, caption: string) => {
 
     const current = photosRef.current.find(photo => photo.id === id);
@@ -875,8 +733,6 @@ export default function App() {
 
   };
 
-
-
   const deleteMemory = async (id: string) => {
 
     try {
@@ -894,8 +750,6 @@ export default function App() {
     }
 
   };
-
-
 
   const reorderPhotos = async (fromId: string, toId: string) => {
 
@@ -935,8 +789,6 @@ export default function App() {
 
   };
 
-
-
   const saveBook = async () => {
 
     setSaving(true);
@@ -948,9 +800,7 @@ export default function App() {
       await putMeta('bookTitle', bookTitle.trim() || 'Curly Tales');
 
       await putMeta('activeSpread', activeSpread);
-
       await putMeta('pageTemplateOverrides', pageTemplateOverrides);
-
       await putMeta('pageTemplateMode', pageTemplateMode);
 
       showToast('Scrapbook saved on this device.');
@@ -967,8 +817,6 @@ export default function App() {
 
   };
 
-
-
   const downloadBook = () => {
 
     if (!photos.length) {
@@ -983,11 +831,7 @@ export default function App() {
 
   };
 
-
-
   const pageLabel = useMemo(() => `${Math.min(shownPageStart, totalPages)}–${Math.min(shownPageStart + 1, totalPages)} of ${totalPages}`, [shownPageStart, totalPages]);
-
-
 
   const editPhotoCaption = async (photo: PhotoView) => {
 
@@ -996,8 +840,6 @@ export default function App() {
     if (caption !== null) await updateCaption(photo.id, caption.trim());
 
   };
-
-
 
   const renderPage = (pageIndex: number, print = false) => {
 
@@ -1015,7 +857,7 @@ export default function App() {
 
     return (
 
-      <div className={`paper-page paper-page--template page-template-${template.id} ${print ? 'paper-page--print' : ''}`} key={`page-${pageIndex}`}>
+      <div className={`paper-page paper-page--template ${pageIndex % 2 === 0 ? 'paper-page--left' : 'paper-page--right'} page-template-${template.id} ${print ? 'paper-page--print' : ''}`} key={`page-${pageIndex}`}>
 
         <div className="template-page-canvas" data-template={template.id}>
 
@@ -1027,7 +869,17 @@ export default function App() {
 
             const slotStyle = {
 
-              left: `${slot.left}%`, top: `${slot.top}%`, width: `${slot.width}%`, height: `${slot.height}%`,
+              left: `${slot.left}%`,
+
+              top: `${slot.top}%`,
+
+              width: `${slot.width}%`,
+
+              height: `${slot.height}%`,
+
+              transform: slot.rotation ? `rotate(${slot.rotation}deg)` : undefined,
+
+              transformOrigin: 'center center',
 
             };
 
@@ -1103,13 +955,14 @@ export default function App() {
 
         </div>
 
+        {print && <div className="print-page-header"><span>Curly Tales</span><span>{bookTitle}</span></div>}
+        {print && <div className="print-page-footer"><span>PHOTO MEMORIES</span><span>{String(pageIndex + 1).padStart(2, '0')}</span></div>}
+
       </div>
 
     );
 
   };
-
-
 
   const renderSpread = (index: number, print = false, extraClass = '') => (
 
@@ -1124,8 +977,6 @@ export default function App() {
     </div>
 
   );
-
-
 
   return (
 
@@ -1185,11 +1036,7 @@ export default function App() {
 
       </header>
 
-
-
       {!storageReady && <div className="loading-line no-print"><span /></div>}
-
-
 
       {view === 'booth' && (
 
@@ -1199,9 +1046,15 @@ export default function App() {
 
             <div className="eyebrow"><span className="eyebrow-line" /> A LITTLE PHOTO SESSION</div>
 
-            <h1>A little <em>moment.</em></h1>
+            <h1>To your little <em>moment.</em></h1>
 
-            <p>No poses needed. Just you, being you.</p>
+            <div className="camera-hero-quote">
+
+              <p>“There’s a whole world out there.”</p>
+
+              <span>— GILMORE GIRLS</span>
+
+            </div>
 
           </div>
 
@@ -1219,7 +1072,7 @@ export default function App() {
 
                   <div className="viewfinder-corners"><i /><i /><i /><i /></div>
 
-                  <div className="placeholder-message"><Camera size={25} strokeWidth={1.35} /><strong>Ready when you are.</strong><span>Let’s make a little memory.</span></div>
+                  <div className="placeholder-message"><Camera size={25} strokeWidth={1.35} /><strong>You know what to do…</strong><span>Start it, click it and make a memory.</span></div>
 
                 </div>}
 
@@ -1233,31 +1086,27 @@ export default function App() {
 
                 {cameraReady ? <button className="button button-primary shutter-button" onClick={() => void capturePhoto()}><span className="shutter-ring"><span /></span> Capture this moment</button> : <button className="button button-primary shutter-button" disabled={cameraBusy} onClick={() => void startCamera()}><Camera size={17} /> {cameraBusy ? 'Opening camera…' : 'Open the camera'}</button>}
 
-                {cameraReady && <button className="button button-outline camera-switch-button" onClick={() => void switchCamera()} disabled={cameraBusy} aria-label={cameraFacingMode === 'user' ? 'Switch to back camera' : 'Switch to front camera'}><RefreshCw size={15} /> {cameraBusy ? 'Switching…' : cameraFacingMode === 'user' ? 'Use back camera' : 'Use front camera'}</button>}
+                {cameraReady && <button className="button button-outline" onClick={startCamera}><RefreshCw size={15} /> Try camera again</button>}
 
                 <button className="button button-outline upload-button" onClick={() => fileInputRef.current?.click()}><Upload size={16} /> Choose photos</button>
 
               </div>
 
-
             </section>
-
-
 
             <aside className="booth-side-panel">
 
-              <div className="side-panel-heading"><span className="eyebrow">SET THE MOOD</span><h2>How should it <em>feel?</em></h2><p>A little warmth, a little grain, a little piece of this day.</p></div>
+              <div className="side-panel-heading"><span className="eyebrow">CHOOSE A FILTER</span><h2>How should it <em>feel?</em></h2><p className="filter-quote">“Different people see the same thing differently.”<span>— PRIDE &amp; PREJUDICE</span></p></div>
 
               <div className="filter-list">
 
                 {FILTERS.map((item, index) => <button key={item.id} className={`filter-option ${filter === item.id ? 'selected' : ''}`} onClick={() => setFilter(item.id)}>
 
-                  <span className={`filter-swatch filter-swatch--${item.id}`}><span /></span><span className="filter-copy"><strong>{item.name}</strong><small>{item.description}</small></span>{filter === item.id ? <span className="filter-check"><Check size={13} /></span> : <span className="filter-number">0{index + 1}</span>}
+                  <span className={`filter-swatch filter-swatch--${item.id}`} style={{ backgroundImage: `url(${item.image})` }} aria-hidden="true" /><span className="filter-copy"><strong>{item.name}</strong><small>{item.description}</small></span>{filter === item.id ? <span className="filter-check"><Check size={13} /></span> : <span className="filter-number">0{index + 1}</span>}
 
                 </button>)}
 
               </div>
-
 
               <button className="button button-book-link" onClick={() => setView('book')}>See your book <ArrowRight size={16} /></button>
 
@@ -1271,55 +1120,46 @@ export default function App() {
 
       )}
 
-
-
       {view === 'book' && (
 
         <main className="book-view no-print">
 
           <div className="book-heading">
 
-            <button className="back-link book-back-link" onClick={() => setView('booth')}><ArrowLeft size={15} /> Back to camera</button>
+            <div className="book-heading-copy"><button className="back-link" onClick={() => setView('booth')}><ArrowLeft size={15} /> Back to photos</button><h1>Your little <em>book.</em></h1></div>
 
-            <div className="book-heading-copy"><div className="eyebrow"><span className="eyebrow-line" /> CURLY TALES</div><h1>Your little <em>book.</em></h1><p>Every little memory, kept together.</p></div>
-
-            <div className="book-actions"><button className="button button-outline" onClick={() => fileInputRef.current?.click()}><Plus size={16} /> Add memories</button><button className="button button-primary" onClick={() => void saveBook()} disabled={saving}><Check size={16} /> {saving ? 'Saving…' : 'Keep this book'}</button><button className="button button-outline download-button" onClick={downloadBook}><Download size={16} /> Print a copy</button></div>
+            <div className="book-actions"><button className="button button-outline" onClick={() => fileInputRef.current?.click()}><Plus size={16} /> Add photos</button><button className="button button-primary" onClick={() => void saveBook()} disabled={saving}><Check size={16} /> {saving ? 'Saving…' : 'Save book'}</button><button className="button button-outline download-button" onClick={downloadBook}><Download size={16} /> Print</button></div>
 
           </div>
 
-          <div className="book-title-row"><div className="book-title-input-wrap"><span className="title-pencil">✎</span><input className="book-title-input" aria-label="Photobook title" value={bookTitle} onChange={event => setBookTitle(event.target.value)} onBlur={() => void putMeta('bookTitle', bookTitle.trim() || 'Curly Tales')} /><span className="title-rule" /></div><div className="book-meta"><span><span className="status-dot" /></span><span className="meta-divider">·</span><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'} collected</span></div></div>
+          <div className="book-title-row"><div className="book-title-input-wrap"><input className="book-title-input" aria-label="Photobook title" value={bookTitle} onChange={event => setBookTitle(event.target.value)} onBlur={() => void putMeta('bookTitle', bookTitle.trim() || 'Curly Tales')} /><span className="title-rule" /></div><div className="book-meta"><span className="status-dot" /><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span></div></div>
 
-
+          
 
           <section className="page-design-controls no-print" aria-label="Scrapbook page designs">
-
-            <div className="page-design-copy"><span className="eyebrow">PAGE DESIGNS</span><strong>Make every page feel different.</strong><small>Use your collage templates as the actual page artwork.</small></div>
-
-            <div className="page-design-mode" role="group" aria-label="Page design mode">
-
-              <button type="button" className={pageTemplateMode === 'auto' ? 'selected' : ''} onClick={() => setPageTemplateMode('auto')}>Mix automatically</button>
-
-              <button type="button" className={pageTemplateMode === 'manual' ? 'selected' : ''} onClick={() => setPageTemplateMode('manual')}>Choose designs</button>
-
+            <div className="page-design-copy">
+              <span className="eyebrow">PAGE DESIGNS</span>
+              <strong>Choose a collage</strong>
             </div>
-
+            <div className="page-design-mode" role="group" aria-label="Page design mode">
+              <button type="button" className={pageTemplateMode === 'auto' ? 'selected' : ''} onClick={() => setPageTemplateMode('auto')}>Mix automatically</button>
+              <button type="button" className={pageTemplateMode === 'manual' ? 'selected' : ''} onClick={() => setPageTemplateMode('manual')}>Choose designs</button>
+            </div>
             {pageTemplateMode === 'manual' && <div className="page-template-selectors">
-
               {[shownPageStart - 1, shownPageStart].map((pageIndex, side) => {
-
-                const page = resolvedPages[pageIndex];
-
-                const selectedTemplate = page?.template.id ?? AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
-
-                return <label key={pageIndex} className="page-template-select-label"><span>{side === 0 ? 'Left page' : 'Right page'} · {String(pageIndex + 1).padStart(2, '0')}</span><select value={selectedTemplate} onChange={event => choosePageTemplate(pageIndex, event.target.value as PageTemplateId)}>{PAGE_TEMPLATES.map(template => <option key={template.id} value={template.id}>{template.name}</option>)}</select></label>;
-
+                const automaticId = AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
+                const selectedTemplate = pageTemplateOverrides[String(pageIndex)] ?? resolvedPages[pageIndex]?.template.id ?? automaticId;
+                return (
+                  <label key={pageIndex} className="page-template-select-label">
+                    <span>{side === 0 ? 'Left page' : 'Right page'} · {String(pageIndex + 1).padStart(2, '0')}</span>
+                    <select value={selectedTemplate} onChange={event => choosePageTemplate(pageIndex, event.target.value as PageTemplateId)}>
+                      {PAGE_TEMPLATES.map(template => <option key={template.id} value={template.id}>{template.name}</option>)}
+                    </select>
+                  </label>
+                );
               })}
-
             </div>}
-
           </section>
-
-
 
           <div className="book-stage-wrap">
 
@@ -1359,23 +1199,17 @@ export default function App() {
 
       )}
 
-
-
       <div className="print-book" aria-hidden="true">
 
-        <div className="print-cover"><div className="print-cover-kicker">CURLY TALES</div><Leaf size={44} strokeWidth={1} /><h1>{bookTitle}</h1><p>A little book of memories</p><span>✳</span></div>
+        <div className="print-cover"><div className="print-cover-kicker">CURLY TALES</div><Leaf size={44} strokeWidth={1} /><h1>{bookTitle}</h1><p>Photo scrapbook</p><span>✳</span></div>
 
-        {Array.from({ length: totalPages }, (_, index) => (
-          <div className="print-page-sheet" key={`print-page-${index}`}>
-            <div className="print-page-heading"><span>Curly Tales</span><span>{bookTitle}</span></div>
-            {renderPage(index, true)}
-            <div className="print-page-number">{String(index + 1).padStart(2, '0')}</div>
-          </div>
-        ))}
+        {Array.from({ length: totalPages }, (_, pageIndex) => (
+        <Fragment key={`print-page-${pageIndex}`}>
+          {renderPage(pageIndex, true)}
+        </Fragment>
+      ))}
 
       </div>
-
-
 
       <input ref={fileInputRef} className="visually-hidden" type="file" accept="image/*" multiple onChange={event => void handleFiles(event)} />
 

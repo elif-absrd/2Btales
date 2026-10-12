@@ -3266,502 +3266,1740 @@ html, body, button, input, select, textarea,
   .camera-controls .button { width: 100%; }
 }
 
+/* --------------------------------------------------------------------------
+   Photo booth art direction: match the supplied Curly Tales reference.
+   CS Claire Mono remains the only typeface throughout.
+   -------------------------------------------------------------------------- */
+.page-heading--camera {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, .48fr);
+  align-items: end;
+  column-gap: clamp(24px, 5vw, 90px);
+  row-gap: 13px;
+  max-width: 1520px;
+  padding-top: clamp(34px, 3.3vw, 48px);
+  padding-bottom: 8px;
+}
+.page-heading--camera .eyebrow { grid-column: 1 / -1; }
+.page-heading--camera h1 {
+  grid-column: 1;
+  max-width: none;
+  margin: 0;
+  font-size: clamp(38px, 5vw, 78px);
+  line-height: 1.06;
+  letter-spacing: -.075em;
+}
+.page-heading--camera h1 em { font-style: italic; }
+.camera-hero-quote {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  align-self: center;
+  max-width: 330px;
+  padding: 0 2px 5px 0;
+  text-align: right;
+  color: #4b392b;
+}
+.camera-hero-quote p {
+  margin: 0 0 8px;
+  font-size: clamp(10px, .85vw, 13px);
+  line-height: 1.8;
+  font-style: italic;
+  color: #3d3026;
+}
+.camera-hero-quote span {
+  display: block;
+  color: #90765c;
+  font-size: 9px;
+  letter-spacing: .09em;
+}
+.booth-view {
+  max-width: 1680px;
+  padding-inline: clamp(24px, 6.2vw, 108px);
+}
+.booth-layout {
+  max-width: 1520px;
+  grid-template-columns: minmax(0, 1.52fr) minmax(340px, .82fr);
+  gap: clamp(34px, 4vw, 68px);
+  margin-top: 28px;
+  align-items: start;
+}
+.camera-card {
+  padding: clamp(14px, 1.25vw, 20px);
+  background: rgba(255, 251, 243, .52);
+  border-color: rgba(155, 116, 75, .55);
+  box-shadow: 0 12px 34px rgba(68, 47, 29, .045);
+}
+.camera-card::before { inset: 5px; border-color: rgba(186, 146, 99, .2); }
+.camera-card-top { padding: 0 2px 13px; font-size: 9px; letter-spacing: .11em; }
+.camera-viewfinder {
+  aspect-ratio: 1.86 / 1;
+  min-height: 350px;
+  background: #5b4833 url('/camera-placeholder.jpg') center 54% / cover no-repeat;
+  border: 0;
+  outline: 1px solid rgba(75, 49, 27, .22);
+  box-shadow: inset 0 0 0 7px rgba(255, 246, 222, .08);
+}
+.camera-viewfinder::after {
+  background: linear-gradient(90deg, rgba(28, 20, 13, .48), rgba(28, 20, 13, .13) 60%, rgba(28, 20, 13, .10)),
+              linear-gradient(0deg, rgba(28, 20, 13, .22), transparent 35%);
+}
+.camera-placeholder {
+  background: transparent;
+  backdrop-filter: none;
+}
+.camera-placeholder::before { inset: 0; border: 0; background: rgba(36, 26, 17, .08); }
+.camera-placeholder .viewfinder-corners { inset: 25px; }
+.placeholder-message {
+  top: 50%;
+  width: min(430px, 86%);
+  gap: 10px;
+  color: #fff5e4;
+  text-shadow: 0 2px 12px rgba(20, 14, 8, .45);
+}
+.placeholder-message strong {
+  font-size: clamp(14px, 1.1vw, 18px);
+  letter-spacing: -.04em;
+}
+.placeholder-message span { font-size: clamp(10px, .9vw, 13px); color: #fff5e4; line-height: 1.7; }
+.placeholder-message small { font-size: 9px; letter-spacing: .1em; color: rgba(255, 245, 228, .88); }
+.viewfinder-date { color: rgba(255, 245, 228, .88); }
+.camera-controls { justify-content: center; gap: 16px; padding: 20px 0 3px; }
+.camera-controls .button { min-height: 51px; padding-inline: clamp(17px, 2vw, 31px); font-size: 11px; }
+.shutter-button { min-width: 220px; }
+.upload-button { margin-left: 0; }
+.booth-side-panel { padding-top: 0; align-self: start; }
+.side-panel-heading .eyebrow { font-size: 9px; letter-spacing: .13em; }
+.side-panel-heading h2 {
+  margin: 15px 0 10px;
+  font-size: clamp(29px, 2.7vw, 43px);
+  line-height: 1.16;
+  letter-spacing: -.07em;
+}
+.side-panel-heading h2 em { font-style: normal; }
+.side-panel-heading p.filter-quote {
+  max-width: 440px;
+  margin: 0 0 20px;
+  color: #806b55;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.filter-quote span {
+  display: block;
+  margin: 4px 0 0 10px;
+  font-size: 9px;
+  letter-spacing: .08em;
+  color: #9a8065;
+}
+.filter-list { gap: 9px; }
+.filter-option {
+  min-height: 82px;
+  padding: 9px 13px;
+  gap: 16px;
+  border-color: rgba(169, 135, 99, .36);
+  background: rgba(255, 250, 239, .48);
+}
+.filter-option.selected {
+  border-color: #a95639;
+  background: rgba(255, 247, 231, .92);
+  box-shadow: inset 4px 0 #a94f32;
+}
+.filter-swatch { width: 88px; height: 68px; flex-basis: 88px; }
+.filter-copy { gap: 7px; }
+.filter-copy strong { font-size: 12px; letter-spacing: -.03em; }
+.filter-copy small { font-size: 9px; line-height: 1.5; }
+.filter-check, .filter-number { flex: 0 0 25px; width: 25px; height: 25px; }
+.filter-check { background: #93472d; color: #fff5e4; }
+.filter-number { font-size: 10px; }
+.button-book-link { margin-top: 22px; font-size: 12px; }
+.recent-strip { max-width: 1520px; margin-top: 42px; }
 
-/* Curly Tales: compact, aligned scrapbook header and calmer book controls. */
+@media (max-width: 1050px) {
+  .booth-view { padding-inline: 28px; }
+  .booth-layout { grid-template-columns: minmax(0, 1.15fr) minmax(290px, .85fr); gap: 28px; }
+  .camera-viewfinder { aspect-ratio: 1.45 / 1; min-height: 300px; }
+  .filter-swatch { width: 62px; height: 58px; flex-basis: 62px; }
+}
+@media (max-width: 760px) {
+  .booth-view { padding: 0 16px 44px; }
+  .page-heading--camera {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 30px 1px 0;
+    text-align: left;
+    row-gap: 11px;
+  }
+  .page-heading--camera .eyebrow { grid-column: 1; justify-content: flex-start; font-size: 8px; }
+  .page-heading--camera h1 { grid-column: 1; font-size: clamp(31px, 8.6vw, 48px); line-height: 1.12; margin: 0; }
+  .camera-hero-quote { grid-column: 1; grid-row: auto; justify-self: start; text-align: left; max-width: 300px; padding: 0; margin-top: 1px; }
+  .camera-hero-quote p { font-size: 10px; margin-bottom: 3px; }
+  .camera-hero-quote span { font-size: 8px; }
+  .booth-layout { grid-template-columns: minmax(0, 1fr); gap: 29px; margin-top: 23px; }
+  .camera-card { padding: 10px; }
+  .camera-card-top { font-size: 7px; padding-bottom: 10px; }
+  .camera-viewfinder { aspect-ratio: 4 / 3; min-height: 230px; }
+  .camera-controls { gap: 8px; padding-top: 13px; }
+  .camera-controls .button { min-height: 44px; padding-inline: 12px; font-size: 9px; }
+  .shutter-button { min-width: 0; flex: 1 1 150px; }
+  .upload-button { flex: 1 1 130px; }
+  .booth-side-panel { padding: 0 1px; }
+  .side-panel-heading h2 { font-size: clamp(28px, 7.5vw, 36px); margin: 10px 0 7px; }
+  .side-panel-heading p.filter-quote { font-size: 9px; margin-bottom: 15px; }
+  .filter-option { min-height: 70px; padding: 8px; gap: 11px; }
+  .filter-swatch { width: 58px; height: 53px; flex-basis: 58px; }
+  .filter-copy strong { font-size: 10px; }
+  .filter-copy small { font-size: 8px; }
+  .filter-check, .filter-number { width: 22px; height: 22px; flex-basis: 22px; }
+  .button-book-link { margin-top: 14px; }
+  .recent-strip { margin-top: 30px; }
+}
+
+/* Compact editorial pass: calmer header, smaller type, tighter proportions. */
+.site-header {
+  height: 70px;
+  padding-inline: clamp(18px, 4.5vw, 64px);
+  gap: 18px;
+}
+.brand-wordmark { font-size: clamp(19px, 1.6vw, 24px); letter-spacing: -.045em; }
+.main-nav { gap: clamp(14px, 1.8vw, 26px); }
+.nav-link { font-size: 9px; letter-spacing: .055em; }
+.nav-count { width: 17px; height: 17px; font-size: 9px; }
+
+.booth-view {
+  max-width: 1500px;
+  padding-inline: clamp(24px, 5.2vw, 82px);
+  padding-bottom: 56px;
+}
+.page-heading--camera {
+  max-width: 1360px;
+  padding-top: clamp(28px, 3vw, 40px);
+  padding-bottom: 0;
+  column-gap: clamp(22px, 3vw, 48px);
+  row-gap: 9px;
+}
+.page-heading--camera .eyebrow { font-size: 8px; letter-spacing: .16em; }
+.page-heading--camera h1 {
+  font-size: clamp(34px, 3.6vw, 58px);
+  line-height: 1.08;
+  letter-spacing: -.065em;
+}
+.camera-hero-quote { max-width: 280px; padding-bottom: 2px; }
+.camera-hero-quote p { font-size: 10px; line-height: 1.6; margin-bottom: 5px; }
+.camera-hero-quote span { font-size: 8px; }
+
+.booth-layout {
+  max-width: 1360px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, .8fr);
+  gap: clamp(26px, 3.2vw, 48px);
+  margin-top: 24px;
+}
+.camera-card { padding: 13px; }
+.camera-card-top { font-size: 8px; padding-bottom: 10px; }
+.camera-viewfinder {
+  height: clamp(285px, 28vw, 405px);
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.camera-controls { gap: 10px; padding: 14px 0 2px; }
+.camera-controls .button { min-height: 43px; padding-inline: 18px; font-size: 10px; }
+.shutter-button { min-width: 180px; }
+.side-panel-heading .eyebrow { font-size: 8px; letter-spacing: .12em; }
+.side-panel-heading h2 {
+  font-size: clamp(26px, 2.25vw, 35px);
+  line-height: 1.12;
+  letter-spacing: -.055em;
+  margin: 11px 0 15px;
+}
+.filter-list { gap: 7px; }
+.filter-option { min-height: 68px; padding: 8px 10px; gap: 12px; }
+.filter-swatch { width: 66px; height: 53px; flex-basis: 66px; }
+.filter-copy { gap: 4px; }
+.filter-copy strong { font-size: 11px; }
+.filter-copy small { font-size: 8px; }
+.filter-check, .filter-number { width: 22px; height: 22px; flex-basis: 22px; }
+.button-book-link { margin-top: 16px; font-size: 11px; }
+.recent-strip { margin-top: 32px; }
+
+@media (max-width: 1050px) {
+  .site-header { height: 66px; }
+  .booth-view { padding-inline: 26px; }
+  .page-heading--camera h1 { font-size: clamp(34px, 4.5vw, 48px); }
+  .booth-layout { grid-template-columns: minmax(0, 1.2fr) minmax(270px, .8fr); gap: 24px; }
+  .camera-viewfinder { height: clamp(270px, 34vw, 350px); }
+  .filter-swatch { width: 56px; height: 50px; flex-basis: 56px; }
+}
+@media (max-width: 760px) {
+  .site-header { height: 62px; padding-inline: 15px; gap: 12px; }
+  .brand-wordmark { font-size: 18px; }
+  .main-nav { gap: 12px; }
+  .nav-link { font-size: 8px; letter-spacing: .025em; }
+  .nav-count { width: 16px; height: 16px; margin-left: 3px; font-size: 8px; }
+  .booth-view { padding: 0 15px 38px; }
+  .page-heading--camera { padding-top: 25px; row-gap: 8px; }
+  .page-heading--camera .eyebrow { font-size: 7px; }
+  .page-heading--camera h1 { font-size: clamp(29px, 7.7vw, 42px); line-height: 1.08; }
+  .camera-hero-quote { margin-top: 0; }
+  .camera-hero-quote p { font-size: 9px; }
+  .booth-layout { grid-template-columns: minmax(0, 1fr); gap: 25px; margin-top: 19px; }
+  .camera-card { padding: 9px; }
+  .camera-viewfinder { height: auto; min-height: 0; aspect-ratio: 4 / 3; }
+  .camera-controls { gap: 7px; padding-top: 11px; }
+  .camera-controls .button { min-height: 40px; padding-inline: 11px; font-size: 9px; }
+  .shutter-button { min-width: 0; }
+  .side-panel-heading h2 { font-size: clamp(25px, 6.5vw, 32px); margin: 8px 0 12px; }
+  .filter-option { min-height: 64px; padding: 7px; gap: 10px; }
+  .filter-swatch { width: 54px; height: 48px; flex-basis: 54px; }
+  .filter-copy strong { font-size: 10px; }
+  .filter-copy small { font-size: 8px; }
+  .button-book-link { margin-top: 12px; }
+}
+
+
+/* Final layout correction: compact left-aligned navigation and a book-like spread. */
+.site-header {
+  height: 64px !important;
+  min-height: 64px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 4.5vw, 68px) !important;
+  gap: 24px;
+}
+.site-header .brand {
+  order: 0;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  justify-self: auto !important;
+  margin: 0 auto 0 0;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+.brand-wordmark { font-size: 22px !important; letter-spacing: -.055em; }
+.main-nav { order: 1; margin-left: auto; justify-content: flex-end; gap: clamp(16px, 2.3vw, 30px); }
+.nav-link { font-size: 9px; }
+
+.book-view {
+  max-width: 1320px !important;
+  padding: 0 clamp(22px, 4.5vw, 64px) 52px !important;
+  margin: 0 auto;
+  text-align: left;
+}
+.book-heading {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end !important;
+  gap: 18px 28px !important;
+  padding-top: 22px !important;
+}
+.book-heading-copy { text-align: left !important; align-items: flex-start; }
+.book-heading-copy .back-link { margin: 0 0 13px !important; }
+.book-heading-copy .eyebrow { justify-content: flex-start; text-align: left; }
+.book-heading-copy h1 {
+  font-size: clamp(32px, 3.2vw, 46px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.06em !important;
+  margin: 8px 0 5px !important;
+  text-align: left !important;
+}
+.book-heading-copy p { margin: 0 !important; font-size: 11px !important; text-align: left; }
+.book-actions { align-self: center; justify-content: flex-end; gap: 7px !important; }
+.book-actions .button { min-height: 36px !important; padding: 0 11px !important; font-size: 9px !important; }
+.book-title-row {
+  max-width: none !important;
+  margin: 17px 0 14px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  text-align: left;
+}
+.book-title-input-wrap { margin: 0; max-width: 480px; }
+.book-title-input { text-align: left !important; font-size: clamp(18px, 1.8vw, 24px) !important; }
+.book-meta { justify-content: flex-end; text-align: right; font-size: 9px; }
+.page-design-controls {
+  margin: 14px 0 16px !important;
+  padding: 12px 15px !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  background: rgba(255, 250, 239, .68) !important;
+  box-shadow: none !important;
+}
+.page-design-copy strong { font-size: 18px !important; }
+.page-design-copy small { font-size: 9px !important; }
+.page-design-mode button { font-size: 10px !important; }
+
+.book-stage-wrap {
+  max-width: 1120px !important;
+  padding: 9px !important;
+  margin: 0 auto;
+  border: 1px solid #9d704e !important;
+  border-radius: 5px !important;
+  background: linear-gradient(135deg, #754631 0%, #a87854 22%, #6d402d 50%, #a87954 78%, #71412c 100%) !important;
+  box-shadow: 0 18px 36px rgba(64, 42, 27, .18), inset 0 0 0 2px rgba(242, 218, 178, .25) !important;
+}
+.book-stage { min-height: 0 !important; }
+.book-spread {
+  grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr) !important;
+  gap: 0;
+  filter: drop-shadow(0 5px 10px rgba(52, 34, 22, .12)) !important;
+}
+.paper-page--template {
+  border-radius: 2px !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 248, 230, .65), 0 1px 3px rgba(45, 28, 17, .18) !important;
+}
+.book-gutter {
+  position: relative;
+  z-index: 3;
+  background: linear-gradient(90deg, #dfc7a5 0%, #f3e4c9 28%, #9c7253 50%, #e4cfb0 76%, #c49a73 100%) !important;
+  box-shadow: inset 1px 0 rgba(255,255,255,.35), inset -1px 0 rgba(71,43,26,.2);
+}
+.gutter-line { background: rgba(83, 53, 34, .24) !important; }
+.book-stage-decoration { color: #b88d5b !important; font-size: 34px !important; }
+.book-stage-decoration.book-decoration-left { left: -34px; }
+.book-stage-decoration.book-decoration-right { right: -34px; }
+.page-turn-footer { max-width: 1120px; margin: 10px auto 0; }
+.page-count { text-align: left; }
+.book-bottom-note { text-align: left !important; margin-top: 8px; }
+
+@media (max-width: 760px) {
+  .site-header { height: 58px !important; min-height: 58px; padding-inline: 14px !important; gap: 10px; }
+  .brand-wordmark { font-size: 18px !important; }
+  .main-nav { gap: 9px; }
+  .nav-link { font-size: 7px; letter-spacing: .02em; }
+  .nav-count { width: 15px; height: 15px; font-size: 8px; }
+  .book-view { padding: 0 13px 34px !important; }
+  .book-heading { grid-template-columns: 1fr; align-items: start !important; gap: 12px !important; padding-top: 16px !important; }
+  .book-heading-copy .back-link { margin-bottom: 10px !important; }
+  .book-heading-copy h1 { font-size: clamp(29px, 8vw, 38px) !important; }
+  .book-actions { justify-content: flex-start; width: 100%; }
+  .book-actions .button { min-height: 34px !important; font-size: 8px !important; }
+  .book-title-row { margin: 14px 0 12px !important; gap: 8px; flex-direction: column; align-items: flex-start; }
+  .book-meta { justify-content: flex-start; text-align: left; }
+  .page-design-controls { padding: 11px !important; margin: 12px 0 !important; }
+  .page-design-copy strong { font-size: 16px !important; }
+  .page-design-mode button { padding: 9px 7px !important; font-size: 8px !important; }
+  .book-stage-wrap { padding: 4px !important; border-radius: 3px !important; }
+  .book-spread { grid-template-columns: minmax(0, 1fr) 7px minmax(0, 1fr) !important; }
+  .book-stage-decoration { display: none !important; }
+  .page-turn-footer { padding-inline: 2px; }
+}
+@media print {
+  .book-stage-wrap { padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; }
+  .book-gutter { background: transparent !important; box-shadow: none !important; }
+}
+
+
+/* Curly Tales: exact Autumn palette from the supplied reference board. */
 :root {
-  font-family: 'CS Claire Mono', monospace;
+  --cream: #F4EEE5;
+  --paper: #FBF7F0;
+  --paper-deep: #E8DED1;
+  --ink: #261B12;
+  --muted: #8A6F5A;
+  --line: #D9C8B8;
+  --rust: #94532F;
+  --rust-dark: #743E24;
+  --olive: #777B5A;
+  --gold: #B9915C;
   --serif: 'CS Claire Mono', monospace;
   --hand: 'CS Claire Mono', monospace;
   --sans: 'CS Claire Mono', monospace;
 }
 
+html,
+body,
+.app-shell {
+  background-color: var(--cream);
+  color: var(--ink);
+}
+
+.app-shell {
+  background-image:
+    radial-gradient(ellipse at 12% 8%, rgba(255,255,255,.7), transparent 43%),
+    radial-gradient(ellipse at 90% 42%, rgba(222,202,174,.13), transparent 46%);
+}
+
 .site-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 24px !important;
-  width: 100%;
-  height: 76px !important;
-  min-height: 76px !important;
-  padding: 0 clamp(22px, 4.8vw, 76px) !important;
-  background: rgba(248, 240, 224, .76) !important;
-  border-bottom: 1px solid rgba(112, 78, 48, .18) !important;
-  box-shadow: 0 4px 18px rgba(76, 53, 33, .025) !important;
-  backdrop-filter: blur(8px);
+  background: rgba(244, 238, 229, .9);
+  border-bottom-color: rgba(138, 111, 90, .24) !important;
 }
 
-.brand {
-  order: 0;
-  flex: 0 0 auto;
-  margin: 0 auto 0 0 !important;
-  grid-column: auto !important;
-  grid-row: auto !important;
-  justify-self: auto !important;
-  justify-content: flex-start !important;
-  text-align: left !important;
-}
-
-.brand-wordmark {
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: clamp(21px, 1.8vw, 27px) !important;
-  font-weight: 500 !important;
-  letter-spacing: -.075em !important;
-  line-height: 1.1 !important;
-}
-
-.brand-wordmark em {
-  margin-left: 2px;
-  color: #a84e31 !important;
-  font-style: italic;
-}
-
-.main-nav {
-  order: 1;
-  flex: 0 0 auto;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  height: 100% !important;
-  margin-left: auto !important;
-  gap: clamp(16px, 2.5vw, 34px) !important;
-  grid-column: auto !important;
-  grid-row: auto !important;
-}
-
-.nav-link {
-  height: 100% !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: 9px !important;
-  font-weight: 500 !important;
-  letter-spacing: .08em !important;
-  text-transform: uppercase;
-  color: #806b55 !important;
-}
-
+.brand-wordmark { color: var(--ink) !important; }
+.brand-wordmark em { color: var(--rust) !important; }
+.nav-link { color: var(--muted) !important; }
 .nav-link:hover,
-.nav-link.active { color: #9c4c31 !important; }
-
-.nav-link.active::after {
-  bottom: 0 !important;
-  width: 24px !important;
-  height: 2px !important;
-  border-radius: 0 !important;
-  background: #a84e31 !important;
-}
-
+.nav-link.active { color: var(--rust) !important; }
+.nav-link.active::after { background: var(--rust) !important; }
 .nav-count {
-  width: 19px !important;
-  height: 19px !important;
-  margin-left: 8px !important;
-  background: #e9d9bd !important;
-  border: 1px solid rgba(151, 109, 66, .16);
-  color: #72523a !important;
-  font-size: 9px !important;
+  background: #E8D8C2 !important;
+  color: var(--ink) !important;
 }
 
-/* The back link now sits quietly in the upper-left corner of the book section. */
-.book-view {
-  max-width: 1780px !important;
-  margin: 0 auto !important;
-  padding: 18px clamp(22px, 2.2vw, 42px) 66px !important;
-}
-
-.book-heading {
-  position: relative !important;
-  display: flex !important;
-  align-items: flex-end !important;
-  justify-content: space-between !important;
-  gap: clamp(20px, 4vw, 58px) !important;
-  padding-top: 40px !important;
-  margin: 0 !important;
-}
-
-.book-back-link {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  margin: 0 !important;
-  min-height: 24px;
-  padding: 2px 0 !important;
-  gap: 7px !important;
-  color: #8a7157 !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: 9px !important;
-  letter-spacing: .01em !important;
-  transition: color .18s ease, transform .18s ease;
-}
-
-.book-back-link:hover {
-  color: #a84e31 !important;
-  transform: translateX(-2px);
-}
-
-.book-heading-copy {
-  flex: 1 1 auto;
-  min-width: 0;
-  padding: 0 !important;
-  text-align: left !important;
-}
-
-.book-heading-copy > .eyebrow { display: none !important; }
-
+.page-heading--camera h1,
 .book-heading-copy h1,
-.book-heading h1 {
-  margin: 0 0 7px !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: clamp(35px, 3.6vw, 51px) !important;
-  font-weight: 500 !important;
-  line-height: 1.12 !important;
-  letter-spacing: -.075em !important;
-  color: #39291e !important;
+.side-panel-heading h2,
+.book-heading h1 { color: var(--ink) !important; }
+
+.eyebrow,
+.page-heading--camera .eyebrow,
+.side-panel-heading .eyebrow { color: var(--muted) !important; }
+.eyebrow-line { background: var(--rust) !important; }
+
+.button-primary,
+.page-design-mode button.selected,
+.filter-check {
+  color: #FFF9F0 !important;
+  background: var(--rust) !important;
+  border-color: var(--rust) !important;
+}
+.button-primary:hover:not(:disabled),
+.page-design-mode button.selected:hover { background: var(--rust-dark) !important; }
+
+.button-outline {
+  color: var(--ink) !important;
+  border-color: #BBA28B !important;
+  background: rgba(251, 247, 240, .74) !important;
+}
+.button-outline:hover:not(:disabled) {
+  background: #FFF9F0 !important;
+  border-color: var(--rust) !important;
 }
 
-.book-heading-copy h1 em { color: #a84e31 !important; font-weight: 500 !important; }
-
-.book-heading-copy p {
-  max-width: 510px;
-  margin: 0 !important;
-  color: #89735d !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: 10px !important;
-  line-height: 1.8 !important;
-  letter-spacing: -.02em;
+.camera-card {
+  background: rgba(251, 247, 240, .76) !important;
+  border-color: #CBB7A0 !important;
+  box-shadow: 0 12px 34px rgba(38, 27, 18, .06) !important;
 }
-
-.book-actions {
-  flex: 0 0 auto;
-  display: flex !important;
-  flex-wrap: wrap;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 8px !important;
-  padding: 0 0 4px !important;
+.camera-viewfinder {
+  background: #2E2118 url('/assets/camera-bg.jpg') center 53% / cover no-repeat !important;
+  outline-color: rgba(38, 27, 18, .22) !important;
 }
-
-.book-actions .button {
-  min-height: 38px !important;
-  padding: 0 13px !important;
-  gap: 8px !important;
-  border-radius: 2px !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: 9px !important;
-  font-weight: 500 !important;
-  letter-spacing: -.025em;
-  box-shadow: none;
+.camera-viewfinder::after {
+  background:
+    linear-gradient(90deg, rgba(38, 27, 18, .50), rgba(38, 27, 18, .17) 60%, rgba(38, 27, 18, .08)),
+    linear-gradient(0deg, rgba(38, 27, 18, .20), transparent 38%) !important;
 }
+.camera-placeholder::before { background: rgba(38, 27, 18, .10) !important; }
+.placeholder-message { color: #FBF7F0 !important; }
+.placeholder-message strong,
+.placeholder-message span { color: #FBF7F0 !important; }
 
-.book-actions .button-primary {
-  background: #9f4e32 !important;
-  border-color: #9f4e32 !important;
-  box-shadow: 0 2px 0 #793a27 !important;
+.side-panel-heading h2 { color: var(--ink) !important; }
+.side-panel-heading h2 em,
+.book-heading-copy h1 em { color: var(--rust) !important; }
+.side-panel-heading p,
+.filter-quote span { color: var(--muted) !important; }
+
+.filter-option {
+  border-color: rgba(138, 111, 90, .26) !important;
+  background: rgba(251, 247, 240, .60) !important;
 }
-
-.book-actions .button-primary:hover:not(:disabled) {
-  background: #87412d !important;
-  border-color: #87412d !important;
-  transform: translateY(-1px);
+.filter-option:hover { background: #FBF7F0 !important; }
+.filter-option.selected {
+  border-color: var(--rust) !important;
+  background: #FBF7F0 !important;
+  box-shadow: inset 4px 0 var(--rust) !important;
 }
+.filter-copy strong { color: var(--ink) !important; }
+.filter-copy small,
+.filter-number { color: var(--muted) !important; }
+.filter-check { background: var(--rust) !important; color: #FFF9F0 !important; }
 
-.book-actions .button-outline {
-  background: rgba(255, 250, 241, .56) !important;
-  border-color: #d7c1a3 !important;
-  color: #73563f !important;
+/* Real photo thumbnails from the supplied reference asset strip. */
+.filter-swatch {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid rgba(38, 27, 18, .12);
 }
+.filter-swatch::before,
+.filter-swatch > span { display: none !important; content: none !important; }
+.filter-swatch--autumn { background-position: center 52% !important; }
+.filter-swatch--sepia { background-position: center 45% !important; }
+.filter-swatch--faded { background-position: center 56% !important; }
+.filter-swatch--moss { background-position: center 52% !important; }
 
-.book-actions .button-outline:hover:not(:disabled) {
-  background: #fff9ee !important;
-  border-color: #b98b5f !important;
-}
-
-.book-title-row {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 18px !important;
-  width: 100%;
-  max-width: none !important;
-  margin: 20px 0 18px !important;
-  padding: 0 0 12px !important;
-  border-bottom: 1px solid rgba(151, 116, 78, .22);
-}
-
-.book-title-input-wrap { min-width: 0 !important; }
-
-.book-title-input {
-  width: min(480px, 58vw) !important;
-  padding: 0 0 6px 24px !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: clamp(17px, 1.65vw, 22px) !important;
-  font-weight: 500 !important;
-  letter-spacing: -.045em !important;
-  line-height: 1.35 !important;
-  color: #a84e31 !important;
-}
-
-.title-pencil { top: 2px !important; font-size: 15px !important; color: #ab815d !important; }
-.title-rule { width: 100% !important; background: linear-gradient(90deg, #b98b61, rgba(226, 204, 172, .25)) !important; }
-
-.book-meta {
-  flex: 0 0 auto;
-  display: inline-flex !important;
-  align-items: center !important;
-  padding: 0 1px 5px 0 !important;
-  gap: 8px !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: 8px !important;
-  letter-spacing: .015em;
-  color: #8e785f !important;
-}
-
-.book-meta .status-dot { width: 5px; height: 5px; box-shadow: 0 0 0 3px rgba(120, 126, 88, .1); }
+.button-book-link,
+.text-link { color: var(--rust) !important; }
+.button-book-link:hover,
+.text-link:hover { color: var(--rust-dark) !important; }
 
 .page-design-controls {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: center !important;
-  gap: 12px 24px !important;
-  margin: 0 0 20px !important;
-  padding: 13px 16px !important;
-  border: 1px solid rgba(180, 145, 105, .35) !important;
-  border-radius: 2px !important;
-  background: rgba(255, 250, 241, .38) !important;
-  box-shadow: none !important;
+  background: rgba(251, 247, 240, .82) !important;
+  border-color: #D9C8B8 !important;
 }
-
-.page-design-copy { display: flex; flex-direction: column; gap: 4px !important; }
-.page-design-copy .eyebrow { margin: 0 !important; font-size: 7px !important; letter-spacing: .16em !important; color: #a56643 !important; }
-.page-design-copy strong {
-  color: #4b3526 !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: clamp(13px, 1.2vw, 16px) !important;
-  font-weight: 500 !important;
-  line-height: 1.35 !important;
-  letter-spacing: -.045em !important;
-}
-.page-design-copy small { color: #90775d !important; font-size: 8px !important; line-height: 1.55 !important; }
-
+.page-design-copy .eyebrow { color: var(--muted) !important; }
+.page-design-copy strong { color: var(--ink) !important; }
+.page-design-copy small { color: var(--muted) !important; }
 .page-design-mode {
-  justify-self: end !important;
-  display: inline-flex !important;
-  flex: 0 0 auto;
-  padding: 3px !important;
-  gap: 3px !important;
-  border: 1px solid #ddc8ab !important;
-  background: rgba(239, 226, 206, .7) !important;
+  background: #E8DED1 !important;
+  border-color: #D2BFA9 !important;
 }
+.page-design-mode button { color: var(--muted) !important; }
+.page-design-mode button.selected { color: #FFF9F0 !important; background: var(--rust) !important; }
 
-.page-design-mode button {
-  min-height: 35px;
-  padding: 0 12px !important;
-  border: 0 !important;
-  background: transparent !important;
-  color: #80674f !important;
-  font-family: 'CS Claire Mono', monospace !important;
-  font-size: 8px !important;
-  font-weight: 500 !important;
-  white-space: nowrap;
-}
-
-.page-design-mode button.selected {
-  color: #fff7ea !important;
-  background: #76503a !important;
-  box-shadow: 0 2px 4px rgba(54, 35, 22, .12) !important;
-}
-
-.page-template-selectors { padding-top: 12px !important; border-top-color: rgba(151, 116, 78, .22) !important; }
-.page-template-select-label { font-family: 'CS Claire Mono', monospace !important; font-size: 8px !important; }
-.page-template-select-label select { font-family: 'CS Claire Mono', monospace !important; font-size: 9px !important; }
+.book-title-input { color: var(--rust) !important; }
+.title-rule { background: #CDB8A1 !important; }
+.book-meta,
+.book-count,
+.page-count,
+.page-count small { color: var(--muted) !important; }
 
 .book-stage-wrap {
-  max-width: 1280px !important;
-  margin: 0 auto !important;
-  border-radius: 2px;
-  box-shadow: 0 18px 38px rgba(55, 38, 23, .16), inset 0 0 0 1px rgba(30, 42, 29, .55) !important;
+  background: linear-gradient(135deg, #261B12 0%, #94532F 22%, #6E3F29 52%, #94532F 78%, #261B12 100%) !important;
+  border-color: #94532F !important;
+  box-shadow: 0 15px 34px rgba(38, 27, 18, .18), inset 0 0 0 2px rgba(244, 238, 229, .17) !important;
 }
-
-.book-stage-decoration { opacity: .5; }
-.book-bottom-note { max-width: 1280px; margin: 10px auto 0 !important; font-family: 'CS Claire Mono', monospace !important; font-size: 8px !important; }
-.page-turn-footer { max-width: 1280px !important; }
-.page-count, .page-sound-toggle { font-family: 'CS Claire Mono', monospace !important; }
-
-@media (max-width: 1000px) {
-  .book-heading { align-items: flex-start !important; gap: 18px !important; }
-  .book-heading-copy h1 { font-size: clamp(33px, 4.5vw, 44px) !important; }
-  .book-actions { max-width: 45%; gap: 6px !important; }
-  .book-actions .button { padding-inline: 9px !important; }
+.paper-page--template { background: var(--cream) !important; }
+.template-page-canvas { background: var(--cream) !important; }
+.book-gutter {
+  background: linear-gradient(90deg, #D7C4AF 0%, #F4EEE5 27%, #8A6F5A 50%, #F4EEE5 76%, #C2A58A 100%) !important;
 }
+.gutter-line { background: rgba(38, 27, 18, .26) !important; }
+.book-stage-decoration { color: #B9915C !important; }
+.page-turn-button--side { color: var(--ink) !important; border-color: #CDB8A1 !important; }
+.page-turn-button--side:hover:not(:disabled) { background: #FBF7F0 !important; }
+.page-sound-toggle { color: var(--muted) !important; border-color: #D9C8B8 !important; }
+.page-sound-toggle.is-enabled { color: var(--rust) !important; }
 
 @media (max-width: 760px) {
-  .site-header {
-    height: 66px !important;
-    min-height: 66px !important;
-    padding: 0 16px !important;
-    gap: 12px !important;
-  }
-  .brand-wordmark { font-size: 18px !important; }
-  .main-nav { gap: 12px !important; }
-  .nav-link { font-size: 7px !important; letter-spacing: .02em !important; }
-  .nav-count { width: 16px !important; height: 16px !important; margin-left: 4px !important; font-size: 8px !important; }
-  .book-view { padding: 15px 15px 42px !important; }
-  .book-heading { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 15px !important; padding-top: 37px !important; }
-  .book-back-link { top: 0 !important; }
-  .book-heading-copy h1 { font-size: clamp(30px, 8.3vw, 40px) !important; line-height: 1.18 !important; }
-  .book-heading-copy p { font-size: 9px !important; }
-  .book-actions { max-width: none !important; width: 100%; justify-content: flex-start !important; flex-wrap: wrap; gap: 6px !important; }
-  .book-actions .button { flex: 1 1 auto; min-height: 36px !important; font-size: 8px !important; }
-  .book-title-row { flex-direction: row !important; align-items: center !important; margin: 17px 0 14px !important; gap: 8px !important; }
-  .book-title-input { width: min(64vw, 320px) !important; font-size: 16px !important; }
-  .book-meta { font-size: 7px !important; gap: 5px !important; white-space: nowrap; }
-  .page-design-controls { grid-template-columns: minmax(0, 1fr) !important; gap: 11px !important; padding: 12px !important; margin-bottom: 14px !important; }
-  .page-design-copy strong { font-size: 13px !important; }
-  .page-design-copy small { font-size: 8px !important; }
-  .page-design-mode { justify-self: stretch !important; width: 100%; }
-  .page-design-mode button { flex: 1 1 0; min-width: 0; padding: 0 7px !important; font-size: 7px !important; }
-  .page-template-selectors { grid-template-columns: 1fr 1fr !important; gap: 7px !important; }
-  .book-stage-wrap { margin-top: 2px !important; }
+  .camera-viewfinder { background-position: center !important; }
+  .filter-swatch { flex-shrink: 0; }
 }
 
-@media (max-width: 390px) {
-  .brand-wordmark { font-size: 16px !important; }
-  .main-nav { gap: 8px !important; }
-  .nav-link { font-size: 6.5px !important; }
-  .book-title-row { align-items: flex-start !important; }
-  .book-meta { white-space: normal; text-align: right; }
-}
-
-
-/* Mobile photo booth: keep camera controls usable and let people switch lenses. */
-.camera-controls { flex-wrap: wrap; }
-.camera-switch-button { min-width: 0; }
-@media (max-width: 600px) {
-  .camera-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .camera-controls .shutter-button { grid-column: 1 / -1; width: 100%; }
-  .camera-controls .camera-switch-button,
-  .camera-controls .upload-button { width: 100%; padding-inline: 9px; font-size: 10px; }
-}
-
-/* Print/PDF: one complete portrait scrapbook design per sheet. This avoids
-   squeezing a two-page landscape spread into the phone's portrait PDF output. */
 @media print {
-  @page { size: A4 portrait; margin: 0; }
-  html, body, .app-shell {
+  .book-stage-wrap { background: transparent !important; }
+}
+
+
+/* Curly Tales — fixed-size A4 book spread with a tactile leather binding */
+.book-view {
+  max-width: 1280px !important;
+  padding: 0 clamp(14px, 3vw, 36px) 42px !important;
+}
+.book-heading { padding-top: 24px !important; }
+.book-title-row { margin: 16px auto 12px !important; max-width: 1020px !important; }
+.page-design-controls { display: none !important; }
+
+.book-stage-wrap {
+  position: relative !important;
+  width: min(100%, 1020px) !important;
+  max-width: 1020px !important;
+  aspect-ratio: 1414 / 1000;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+.book-stage-wrap::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background: url('/assets/open-book-base.png') center / 100% 100% no-repeat;
+  filter: drop-shadow(0 15px 15px rgba(53, 32, 18, .22));
+}
+.book-stage {
+  position: absolute !important;
+  z-index: 1;
+  inset: 6.2% 5% 6.8% !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  perspective: 2200px;
+  perspective-origin: 50% 48%;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+.book-stage--turning { overflow: visible !important; }
+.book-spread {
+  display: none;
+  position: absolute !important;
+  inset: 0 !important;
+  grid-template-columns: minmax(0, 1fr) 4.3% minmax(0, 1fr) !important;
+  gap: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  align-items: stretch !important;
+  filter: none !important;
+  animation: none !important;
+  background: transparent !important;
+}
+.book-spread--active { display: grid !important; }
+.book-spread--underlay,
+.book-spread--turning {
+  display: grid !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  filter: none !important;
+  animation: none !important;
+  transform-style: preserve-3d;
+}
+.paper-page.paper-page--template {
+  position: relative !important;
+  min-width: 0 !important;
+  width: auto !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+.paper-page--template::before,
+.paper-page--template::after { display: none !important; content: none !important; }
+.template-page-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+.page-template-overlay { display: none !important; }
+.book-gutter {
+  position: relative !important;
+  z-index: 4 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+.gutter-line { display: none !important; }
+.book-stage-decoration { display: none !important; }
+
+/* Each page gets a different photo composition. Frames, tape and restrained page details are live CSS, not baked into a template image. */
+.template-page-canvas::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .52;
+  width: 16%;
+  height: 12%;
+  right: 5%;
+  bottom: 4%;
+  background: radial-gradient(ellipse at 45% 50%, rgba(172, 97, 53, .13), transparent 68%);
+}
+.page-template-autumn-memory .template-page-canvas::before {
+  width: 15%; height: 15%; right: 7%; bottom: 5%;
+  background: radial-gradient(ellipse at 44% 54%, rgba(158, 77, 40, .22), transparent 72%);
+}
+.page-template-music-collage .template-page-canvas::before {
+  width: 18%; height: 18%; right: 5%; bottom: 6%;
+  background: radial-gradient(circle, transparent 32%, rgba(65, 48, 40, .10) 33% 35%, transparent 36% 47%, rgba(65, 48, 40, .08) 48% 51%, transparent 52%);
+}
+.page-template-vinyl-pop .template-page-canvas::before {
+  width: 16%; height: 12%; left: 6%; bottom: 6%; right: auto;
+  background: radial-gradient(ellipse at center, rgba(148, 83, 47, .18), transparent 70%);
+}
+.page-template-webhead .template-page-canvas::before {
+  width: 20%; height: 15%; right: 5%; top: 6%; bottom: auto;
+  background: radial-gradient(circle, rgba(148, 83, 47, .14) 1px, transparent 1.6px) 0 0 / 7px 7px;
+}
+.page-template-autumn-journal .template-page-canvas::before {
+  width: 18%; height: 14%; left: 5%; bottom: 5%; right: auto;
+  background: repeating-linear-gradient(0deg, rgba(148, 83, 47, .10) 0 1px, transparent 1px 5px);
+}
+.page-template-coffee-records .template-page-canvas::before {
+  width: 18%; height: 14%; right: 6%; bottom: 5%;
+  background: radial-gradient(ellipse at center, rgba(94, 91, 62, .16), transparent 70%);
+}
+.template-photo-slot {
+  position: absolute !important;
+  z-index: 1;
+  overflow: visible !important;
+  box-sizing: border-box;
+  padding: 6px 6px 11px !important;
+  background: #fffdf7 !important;
+  border: 1px solid rgba(198, 174, 143, .88) !important;
+  border-radius: 1px !important;
+  box-shadow: 0 4px 9px rgba(55, 36, 21, .18), 0 1px 2px rgba(55, 36, 21, .12) !important;
+  cursor: grab;
+  user-select: none;
+  transform-origin: center center;
+  transition: box-shadow .18s ease;
+}
+.template-photo-slot::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -7px;
+  left: 50%;
+  width: 24%;
+  height: 13px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: rgba(211, 177, 124, .60);
+  border: 1px solid rgba(174, 133, 83, .14);
+  box-shadow: 0 1px 1px rgba(64, 40, 22, .05);
+  pointer-events: none;
+}
+.template-photo-slot:hover {
+  z-index: 5 !important;
+  box-shadow: 0 7px 14px rgba(55, 36, 21, .22), 0 1px 2px rgba(55, 36, 21, .12) !important;
+}
+.template-photo-slot:active { cursor: grabbing; }
+.template-photo-slot.is-dragging { opacity: .48; }
+.template-photo-slot img {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  border: 0;
+}
+.template-photo-actions { z-index: 8 !important; }
+.book-side-navigation { inset: 0 !important; }
+.page-turn-button--side {
+  top: auto !important;
+  bottom: -1.3% !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 0 !important;
+  border: 1px solid rgba(177, 136, 96, .7) !important;
+  border-radius: 50% !important;
+  background: rgba(250, 244, 233, .97) !important;
+  color: #75452d !important;
+  box-shadow: 0 3px 8px rgba(59, 35, 20, .12) !important;
+  transform: none !important;
+}
+.page-turn-button--previous { left: 43% !important; }
+.page-turn-button--next { right: 43% !important; }
+.page-turn-button--side:hover:not(:disabled) { transform: translateY(-1px) !important; }
+.page-turn-footer { max-width: 1020px !important; margin: 10px auto 0 !important; }
+.page-turn-footer .page-count { align-items: center !important; text-align: center !important; }
+.page-sound-toggle { border: 1px solid #d8c3aa !important; border-radius: 2px !important; background: rgba(255, 250, 241, .72) !important; color: #74533d !important; padding: 7px 10px !important; }
+.page-sound-toggle.is-enabled { background: #efe0cc !important; }
+
+/* On the turning layer, reveal a real paper face while the still book frame remains anchored underneath. */
+.book-spread--turning .paper-page--template {
+  background: linear-gradient(90deg, #e7d8c2 0%, #fbf4e7 7%, #f9f1e3 88%, #e7d7c0 100%) !important;
+  box-shadow: 0 3px 9px rgba(53, 34, 19, .14), inset 0 0 0 1px rgba(255, 247, 232, .75) !important;
+}
+.book-spread--turning .template-page-canvas { overflow: hidden !important; }
+.book-spread--turning .template-photo-slot { backface-visibility: hidden; }
+
+/* Six editorial collage treatments, with distinct frames rather than repeated baked-in template art. */
+.page-template-autumn-memory .template-photo-slot {
+  background: #fffdf7 !important;
+  border-color: rgba(194, 164, 126, .9) !important;
+  padding-bottom: 13px !important;
+}
+.page-template-music-collage .template-photo-slot {
+  background: #f7f3eb !important;
+  border-color: rgba(133, 118, 104, .78) !important;
+  box-shadow: 0 4px 9px rgba(37, 31, 30, .18), 2px 2px 0 rgba(84, 66, 58, .09) !important;
+}
+.page-template-vinyl-pop .template-photo-slot {
+  background: #fffaf1 !important;
+  border: 2px solid rgba(76, 53, 48, .82) !important;
+  box-shadow: 0 4px 0 rgba(76, 53, 48, .09), 0 7px 12px rgba(37, 27, 22, .16) !important;
+}
+.page-template-webhead .template-photo-slot {
+  background: #fffdf7 !important;
+  border-color: rgba(148, 83, 47, .65) !important;
+  box-shadow: 0 4px 10px rgba(47, 35, 28, .16) !important;
+}
+.page-template-autumn-journal .template-photo-slot {
+  background: #fffdf6 !important;
+  border-color: rgba(198, 180, 154, .95) !important;
+  box-shadow: 0 3px 8px rgba(62, 43, 29, .13) !important;
+}
+.page-template-coffee-records .template-photo-slot {
+  background: #fdfaf2 !important;
+  border-color: rgba(165, 147, 122, .9) !important;
+  box-shadow: 0 5px 10px rgba(55, 43, 31, .17) !important;
+}
+
+/* Browser Save as PDF / Print: one A4 portrait leaf per PDF page, not a landscape two-page spread. */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  html, body, #root, .app-shell {
     width: 210mm !important;
     min-width: 0 !important;
+    max-width: 210mm !important;
     margin: 0 !important;
     padding: 0 !important;
-    background: #fffaf1 !important;
+    background: #fbf7f0 !important;
     overflow: visible !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
   }
   body * { visibility: hidden !important; }
   .print-book, .print-book * { visibility: visible !important; }
   .print-book {
     display: block !important;
     position: absolute !important;
-    top: 0 !important;
     left: 0 !important;
+    top: 0 !important;
     width: 210mm !important;
+    min-width: 210mm !important;
     margin: 0 !important;
     padding: 0 !important;
-    color: #352a21 !important;
-    background: #fffaf1 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    color: #261b12 !important;
+    background: #fbf7f0 !important;
   }
   .print-cover {
-    display: flex !important;
-    position: relative !important;
     width: 210mm !important;
     height: 297mm !important;
     min-height: 297mm !important;
     margin: 0 !important;
-    padding: 20mm !important;
-    box-sizing: border-box !important;
-    page-break-after: always !important;
-    break-after: page !important;
+    padding: 15mm !important;
     border: 1px solid #d6c1a3 !important;
     outline: 1px solid #d6c1a3 !important;
     outline-offset: -7mm !important;
-    background: #f3e8d6 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    break-after: page !important;
+    page-break-after: always !important;
+    background: #f4eee5 !important;
+    box-sizing: border-box !important;
   }
-  .print-cover-kicker { font: 9pt 'CS Claire Mono', monospace !important; letter-spacing: 3px !important; margin-bottom: 24mm !important; }
-  .print-cover h1 { font: 30pt 'CS Claire Mono', monospace !important; font-weight: 500 !important; margin: 8mm 0 4mm !important; }
-  .print-cover p { font: 11pt 'CS Claire Mono', monospace !important; color: #806b56 !important; }
-  .print-cover > span { font-size: 26pt !important; margin-top: 20mm !important; color: #a5482b !important; }
-  .print-page-sheet {
-    position: relative !important;
+  .print-book-title { display: none !important; }
+  .paper-page.paper-page--print {
     display: block !important;
+    position: relative !important;
     width: 210mm !important;
     height: 297mm !important;
     min-height: 297mm !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    background: #fffaf1 !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  .print-page-heading {
-    position: absolute !important;
-    z-index: 5 !important;
-    top: 5mm !important;
-    left: 7mm !important;
-    right: 7mm !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    color: #8d765e !important;
-    font: 6.5pt 'CS Claire Mono', monospace !important;
-    letter-spacing: .4px !important;
-  }
-  .print-page-number {
-    position: absolute !important;
-    z-index: 5 !important;
-    right: 7mm !important;
-    bottom: 4mm !important;
-    color: #8d765e !important;
-    font: 6pt 'CS Claire Mono', monospace !important;
-  }
-  .print-page-sheet .paper-page--template {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
+    max-height: 297mm !important;
     aspect-ratio: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    background: #fbf7f0 !important;
     box-shadow: none !important;
-    overflow: hidden !important;
-    background: #fffaf1 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+    break-after: page !important;
+    page-break-after: always !important;
+    filter: none !important;
   }
-  .print-page-sheet .template-page-canvas {
+  .paper-page--print::before,
+  .paper-page--print::after { display: none !important; content: none !important; }
+  .paper-page--print .template-page-canvas {
     position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 50% !important;
-    width: min(100%, 167.06mm) !important;
-    height: 297mm !important;
-    aspect-ratio: 9 / 16 !important;
-    transform: translateX(-50%) !important;
-    overflow: hidden !important;
-    background: #fffaf1 !important;
+    inset: 12mm 10mm 13mm !important;
+    overflow: visible !important;
+    background: transparent !important;
   }
-  .print-page-sheet .template-photo-slot img { object-fit: cover !important; }
-  .print-page-sheet .page-template-overlay { width: 100% !important; height: 100% !important; object-fit: fill !important; }
-  .print-page-sheet .template-photo-actions,
-  .print-page-sheet .no-print { display: none !important; }
-  .book-spread--print { display: none !important; }
+  .paper-page--print .template-photo-slot {
+    padding: 2mm 2mm 4mm !important;
+    border: .25mm solid #d3c2ad !important;
+    box-shadow: 0 1mm 2mm rgba(55, 36, 21, .12) !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .paper-page--print .template-photo-slot::before {
+    top: -2mm !important;
+    height: 3.5mm !important;
+    background: rgba(211, 177, 124, .60) !important;
+  }
+  .paper-page--print .template-photo-slot img {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .paper-page--print .template-photo-actions,
+  .paper-page--print .page-template-overlay { display: none !important; }
+  .print-page-header,
+  .print-page-footer {
+    position: absolute !important;
+    z-index: 20 !important;
+    left: 12mm !important;
+    right: 12mm !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    color: #8a6f5a !important;
+    font: 7pt 'CS Claire Mono', monospace !important;
+    letter-spacing: .8pt !important;
+    text-transform: uppercase !important;
+  }
+  .print-page-header { top: 5mm !important; border-bottom: .25mm solid #ddcdbb !important; padding-bottom: 2mm !important; }
+  .print-page-footer { bottom: 5mm !important; border-top: .25mm solid #ddcdbb !important; padding-top: 2mm !important; }
+  .print-book .paper-page--print:last-of-type { break-after: auto !important; page-break-after: auto !important; }
+  .no-print, .site-header, .book-view, .book-stage-wrap, .page-turn-footer, .toast, .saving-indicator, .mobile-footer { display: none !important; }
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 760px) {
+  .book-view { padding-inline: 10px !important; }
+  .book-heading { padding-top: 14px !important; }
+  .book-heading-copy h1 { font-size: clamp(30px, 6vw, 42px) !important; }
+  .book-actions .button { min-height: 34px !important; padding-inline: 9px !important; }
+  .book-title-row { margin: 12px auto 8px !important; }
+  .book-stage-wrap { width: min(100%, 1020px) !important; }
+  .template-photo-slot { padding: 3px 3px 6px !important; }
+  .template-photo-slot::before { height: 6px; top: -4px; }
+  .page-turn-button--side { width: 24px !important; height: 24px !important; bottom: -1.6% !important; }
+  .page-turn-button--previous { left: 40% !important; }
+  .page-turn-button--next { right: 40% !important; }
+}
+
+/* Curly Tales supplied collages: photos sit underneath each PNG's transparent cut-outs. */
+.page-design-controls {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 10px 18px !important;
+  margin: 12px 0 14px !important;
+  padding: 11px 13px !important;
+  border: 1px solid #d9c8b8 !important;
+  background: rgba(251, 247, 240, .82) !important;
+  box-shadow: none !important;
+}
+.page-design-copy { gap: 3px !important; }
+.page-design-copy strong { font-size: 17px !important; line-height: 1.2 !important; }
+.page-design-copy small { font-size: 9px !important; }
+.page-design-mode { gap: 3px !important; }
+.page-design-mode button { padding: 9px 11px !important; }
+.page-template-selectors { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+
+/* The physical book stays anchored at a fixed A4-spread ratio when its page content changes. */
+.book-stage-wrap {
+  position: relative !important;
+  width: min(100%, 1020px) !important;
+  max-width: 1020px !important;
+  aspect-ratio: 1414 / 1000 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+.book-stage-wrap::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background: url('/assets/open-book-base.png') center / 100% 100% no-repeat !important;
+  filter: drop-shadow(0 15px 15px rgba(53, 32, 18, .22)) !important;
+}
+.book-stage {
+  position: absolute !important;
+  z-index: 1 !important;
+  inset: 6.2% 5% 6.8% !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  perspective: 2200px !important;
+  perspective-origin: 50% 48% !important;
+  transform-style: preserve-3d !important;
+  isolation: isolate;
+}
+.book-stage--turning { overflow: visible !important; }
+.book-spread {
+  display: none;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  grid-template-columns: minmax(0, 1fr) 4.3% minmax(0, 1fr) !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  filter: none !important;
+  animation: none !important;
+  background: transparent !important;
+}
+.book-spread--active { display: grid !important; }
+.book-spread--underlay,
+.book-spread--turning {
+  display: grid !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  filter: none !important;
+  animation: none !important;
+  transform-style: preserve-3d !important;
+}
+.paper-page.paper-page--template {
+  position: relative !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+.paper-page--template::before,
+.paper-page--template::after { display: none !important; content: none !important; }
+.template-page-canvas {
+  position: absolute !important;
+  z-index: 1 !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+.template-page-canvas::before { z-index: 0 !important; }
+.template-photo-slot {
+  position: absolute !important;
+  z-index: 1 !important;
+  display: block !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: grab;
+  user-select: none;
+  transform-origin: center center;
+}
+.template-photo-slot::before,
+.template-photo-slot::after { display: none !important; content: none !important; }
+.template-photo-slot img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  pointer-events: none !important;
+}
+img.page-template-overlay {
+  display: block !important;
+  position: absolute !important;
+  z-index: 5 !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: fill !important;
+  pointer-events: none !important;
+  user-select: none !important;
+}
+.template-photo-actions { z-index: 8 !important; }
+.template-photo-actions button { pointer-events: auto !important; }
+.book-gutter { z-index: 4 !important; background: transparent !important; box-shadow: none !important; pointer-events: none !important; }
+.book-gutter .gutter-line { display: none !important; }
+.book-stage-decoration { display: none !important; }
+
+/* A4 PDF export uses the same artwork and slot geometry, one portrait page per PDF sheet. */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  .page-design-controls,
+  .template-photo-actions,
+  .book-empty-hint,
+  .print-page-header,
+  .print-page-footer { display: none !important; }
+  .paper-page.paper-page--print {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #fbf7f0 !important;
+    box-shadow: none !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+  .paper-page--print .template-page-canvas {
+    position: absolute !important;
+    inset: 0 !important;
+    overflow: hidden !important;
+    background: transparent !important;
+  }
+  .paper-page--print .template-photo-slot {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .paper-page--print .template-photo-slot::before,
+  .paper-page--print .template-photo-actions { display: none !important; }
+  .paper-page--print .template-photo-slot img { object-fit: cover !important; }
+  .paper-page--print img.page-template-overlay {
+    display: block !important;
+    position: absolute !important;
+    z-index: 5 !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-design-controls { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .page-design-mode { justify-self: stretch !important; }
+  .page-design-mode button { flex: 1 !important; }
+  .page-template-selectors { grid-template-columns: 1fr 1fr !important; gap: 7px !important; }
+  .book-stage-wrap { width: 100% !important; }
+  .book-spread { grid-template-columns: minmax(0, 1fr) 3.3% minmax(0, 1fr) !important; }
+}
+
+/* Final UI polish: compact navigation, quiet controls, and side-mounted page turns. */
+@media screen {
+  .site-header {
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 0 clamp(18px, 4vw, 56px) !important;
+    border-bottom: 1px solid rgba(115, 78, 51, .17) !important;
+    background: rgba(248, 243, 235, .94) !important;
+    gap: 18px !important;
+  }
+  .site-header .brand { margin: 0 auto 0 0 !important; }
+  .brand-wordmark {
+    font-size: clamp(19px, 1.7vw, 22px) !important;
+    font-weight: 500 !important;
+    letter-spacing: -.055em !important;
+  }
+  .main-nav { gap: clamp(18px, 2.2vw, 30px) !important; height: 100% !important; }
+  .nav-link {
+    font-size: 9px !important;
+    letter-spacing: .09em !important;
+    text-transform: uppercase !important;
+    color: #78695b !important;
+  }
+  .nav-link.active { color: #8d452c !important; }
+  .nav-link.active::after { width: 100% !important; height: 2px !important; background: #9d4e31 !important; }
+  .nav-count { display: none !important; }
+
+  .book-view {
+    max-width: 1240px !important;
+    padding: 0 clamp(20px, 4.2vw, 58px) 30px !important;
+  }
+  .book-heading {
+    padding-top: 17px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 12px 24px !important;
+  }
+  .book-heading-copy { text-align: left !important; min-width: 0; }
+  .book-heading-copy .back-link {
+    margin: 0 0 7px !important;
+    font-size: 9px !important;
+    color: #88735e !important;
+  }
+  .book-heading-copy > .eyebrow,
+  .book-heading-copy > p { display: none !important; }
+  .book-heading-copy h1 {
+    font-size: clamp(33px, 3.2vw, 43px) !important;
+    line-height: 1.04 !important;
+    margin: 0 !important;
+    letter-spacing: -.055em !important;
+  }
+  .book-actions {
+    align-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 7px !important;
+    flex-wrap: wrap !important;
+  }
+  .book-actions .button {
+    min-height: 34px !important;
+    padding: 0 11px !important;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+  }
+  .book-title-row {
+    margin: 10px 0 8px !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+  .book-title-input-wrap { max-width: 340px !important; }
+  .book-title-input {
+    font-size: 18px !important;
+    line-height: 1.25 !important;
+    padding: 1px 0 5px !important;
+  }
+  .title-pencil { font-size: 14px !important; }
+  .book-meta { font-size: 9px !important; color: #94816b !important; }
+
+  .page-design-controls {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 8px 16px !important;
+    margin: 8px 0 15px !important;
+    padding: 9px 0 11px !important;
+    border: 0 !important;
+    border-bottom: 1px solid #decfbe !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .page-design-copy { gap: 0 !important; }
+  .page-design-copy .eyebrow { display: none !important; }
+  .page-design-copy strong {
+    color: #47372b !important;
+    font: 500 14px/1.25 var(--serif) !important;
+  }
+  .page-design-copy small { display: none !important; }
+  .page-design-mode {
+    padding: 2px !important;
+    gap: 2px !important;
+    border: 1px solid #ddcbb6 !important;
+    background: #f0e5d7 !important;
+  }
+  .page-design-mode button {
+    padding: 8px 10px !important;
+    font-size: 9px !important;
+    color: #806c57 !important;
+  }
+  .page-design-mode button.selected {
+    background: #965033 !important;
+    color: #fff8ef !important;
+    box-shadow: none !important;
+  }
+  .page-template-selectors {
+    padding-top: 9px !important;
+    gap: 10px !important;
+    border-top: 1px solid #e4d7c8 !important;
+  }
+  .page-template-select-label { font-size: 8px !important; gap: 4px !important; }
+  .page-template-select-label select {
+    min-height: 33px !important;
+    padding: 0 9px !important;
+    font-size: 10px !important;
+    background: #fbf7f0 !important;
+  }
+
+  /* Fixed aspect-ratio stage means the book never shifts or resizes during a turn. */
+  .book-stage-wrap {
+    width: min(100%, 1020px, calc((100svh - 290px) * 1.414)) !important;
+    max-width: 1020px !important;
+    aspect-ratio: 1414 / 1000 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .book-stage-wrap::before { inset: 0 !important; }
+  .book-stage {
+    inset: 6.2% 5% 6.8% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  .book-spread,
+  .book-spread--underlay,
+  .book-spread--turning {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+  .book-stage-decoration { display: none !important; }
+
+  /* Arrows belong at the outer midpoints of the book, never under the book. */
+  .book-side-navigation {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 25 !important;
+    pointer-events: none !important;
+  }
+  .page-turn-button--side {
+    position: absolute !important;
+    top: 50% !important;
+    bottom: auto !important;
+    width: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    border: 1px solid rgba(168, 126, 87, .72) !important;
+    border-radius: 50% !important;
+    background: #faf5ec !important;
+    color: #71452f !important;
+    box-shadow: 0 3px 10px rgba(51, 32, 20, .16), inset 0 0 0 2px rgba(255,255,255,.6) !important;
+    transform: translateY(-50%) !important;
+    pointer-events: auto !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+  .page-turn-button--previous { left: clamp(-25px, -2.1vw, -16px) !important; right: auto !important; }
+  .page-turn-button--next { right: clamp(-25px, -2.1vw, -16px) !important; left: auto !important; }
+  .page-turn-button--side:hover:not(:disabled) {
+    transform: translateY(-50%) scale(1.05) !important;
+    background: #fffaf3 !important;
+  }
+  .page-turn-button--side:disabled { opacity: .26 !important; }
+
+  .page-turn-footer {
+    position: relative !important;
+    width: min(100%, 1020px, calc((100svh - 290px) * 1.414)) !important;
+    min-height: 40px !important;
+    margin: 5px auto 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .page-turn-footer .page-count {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    text-align: center !important;
+    color: #927860 !important;
+  }
+  .page-count > span,
+  .page-count small { display: none !important; }
+  .page-turn-footer .page-count strong { font-size: 10px !important; color: #6d4a34 !important; }
+  .page-sound-toggle {
+    right: 0 !important;
+    top: 50% !important;
+    min-height: 30px !important;
+    border: 1px solid #d8c4ad !important;
+    border-radius: 999px !important;
+    padding: 0 10px !important;
+    background: rgba(250, 246, 238, .9) !important;
+    color: #795a42 !important;
+    font-size: 9px !important;
+    transform: translateY(-50%) !important;
+  }
+  .page-sound-toggle.is-enabled { background: #efe0cd !important; }
+  .book-bottom-note { display: none !important; }
+}
+
+@media screen and (max-width: 760px) {
+  .site-header { padding-inline: 14px !important; }
+  .main-nav { gap: 12px !important; }
+  .nav-link { font-size: 8px !important; }
+  .book-view { padding: 0 14px 24px !important; }
+  .book-heading {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 10px !important;
+    padding-top: 13px !important;
+  }
+  .book-heading-copy .back-link { margin-bottom: 5px !important; }
+  .book-heading-copy h1 { font-size: clamp(30px, 7vw, 38px) !important; }
+  .book-actions { justify-content: flex-start !important; }
+  .book-actions .button { min-height: 32px !important; padding-inline: 9px !important; font-size: 8px !important; }
+  .book-title-row { margin: 9px 0 6px !important; }
+  .book-title-input { font-size: 16px !important; }
+  .page-design-controls { grid-template-columns: minmax(0, 1fr) auto !important; gap: 8px !important; margin-bottom: 11px !important; }
+  .page-design-copy strong { font-size: 12px !important; }
+  .page-design-mode button { padding: 7px 8px !important; font-size: 8px !important; }
+  .page-template-selectors { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .book-stage-wrap { width: min(100%, calc((100svh - 300px) * 1.414)) !important; }
+  .book-stage { inset: 6.2% 5% 6.8% !important; }
+  .page-turn-button--side { width: 30px !important; height: 30px !important; }
+  .page-turn-button--previous { left: -5px !important; }
+  .page-turn-button--next { right: -5px !important; }
+  .page-turn-footer { width: 100% !important; min-height: 38px !important; }
+  .page-sound-toggle { font-size: 8px !important; padding: 0 7px !important; }
+}
+
+/* Curly Tales autumn polish — compact hierarchy, calm spacing and no redundant icons/copy. */
+@media screen {
+  .app-shell {
+    background:
+      radial-gradient(ellipse at 88% 12%, rgba(190, 125, 72, .075), transparent 28%),
+      radial-gradient(ellipse at 12% 68%, rgba(125, 112, 78, .055), transparent 26%),
+      #f5eee3 !important;
+  }
+  .app-shell::before { opacity: .055 !important; }
+
+  .site-header {
+    height: 60px !important;
+    min-height: 60px !important;
+    padding: 0 clamp(22px, 4.5vw, 72px) !important;
+    background: rgba(248, 243, 235, .96) !important;
+    border-bottom: 1px solid #dfd0bd !important;
+  }
+  .brand-wordmark {
+    color: #30241c !important;
+    font-size: clamp(19px, 1.55vw, 22px) !important;
+    font-weight: 500 !important;
+    letter-spacing: -.045em !important;
+  }
+  .brand-wordmark em { color: #a64f30 !important; font-style: italic !important; }
+  .main-nav { gap: clamp(18px, 2vw, 30px) !important; }
+  .nav-link { font-size: 9px !important; letter-spacing: .11em !important; color: #806f5d !important; }
+  .nav-link.active { color: #94462b !important; }
+  .nav-link.active::after { width: 100% !important; background: #a64f30 !important; height: 2px !important; }
+
+  .book-view {
+    width: 100% !important;
+    max-width: 1510px !important;
+    padding: 0 clamp(22px, 4.2vw, 62px) 36px !important;
+    margin: 0 auto !important;
+    background: transparent !important;
+  }
+  .book-heading {
+    padding-top: 17px !important;
+    margin: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 12px 24px !important;
+  }
+  .book-heading-copy { padding: 0 !important; text-align: left !important; min-width: 0 !important; }
+  .book-heading-copy .back-link {
+    margin: 0 0 5px !important;
+    padding: 0 !important;
+    font-size: 9px !important;
+    color: #8b745e !important;
+    gap: 6px !important;
+  }
+  .book-heading-copy h1 {
+    margin: 0 !important;
+    font-size: clamp(34px, 3.15vw, 45px) !important;
+    line-height: 1.03 !important;
+    letter-spacing: -.06em !important;
+    color: #30241c !important;
+  }
+  .book-heading-copy h1 em { color: #a55031 !important; }
+  .book-actions {
+    align-self: center !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-end !important;
+    gap: 7px !important;
+  }
+  .book-actions .button {
+    min-height: 35px !important;
+    padding: 0 12px !important;
+    border-radius: 1px !important;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+    letter-spacing: .01em !important;
+    box-shadow: none !important;
+  }
+  .book-actions .button-primary { background: #98502f !important; border-color: #98502f !important; color: #fff8ed !important; }
+  .book-actions .button-outline { border-color: #ceb49a !important; background: rgba(255, 250, 241, .72) !important; color: #604633 !important; }
+  .book-actions .button-outline:hover { background: #fffaf1 !important; border-color: #a96a45 !important; }
+
+  .book-title-row {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 9px 0 10px !important;
+    padding: 0 0 7px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: end !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    border-bottom: 1px solid rgba(166, 107, 68, .27) !important;
+  }
+  .book-title-input-wrap { min-width: 0 !important; width: min(370px, 52vw) !important; max-width: 430px !important; }
+  .book-title-input {
+    width: 100% !important;
+    padding: 1px 0 4px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #9e4c2d !important;
+    font: 500 clamp(19px, 1.8vw, 24px)/1.15 var(--serif) !important;
+    letter-spacing: -.015em !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .book-title-input:focus { border-bottom: 1px solid #b36a45 !important; }
+  .title-rule { display: none !important; }
+  .title-pencil { display: none !important; }
+  .book-meta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    color: #8b765e !important;
+    font-size: 9px !important;
+    white-space: nowrap !important;
+  }
+  .book-meta .status-dot { width: 6px !important; height: 6px !important; background: #7f8058 !important; box-shadow: 0 0 0 3px rgba(127,128,88,.10) !important; }
+
+  .page-design-controls {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 8px 18px !important;
+    margin: 0 0 12px !important;
+    padding: 9px 11px 10px !important;
+    border: 1px solid #dfc9b2 !important;
+    border-left: 3px solid #a65a37 !important;
+    border-radius: 1px !important;
+    background: rgba(250, 245, 236, .84) !important;
+    box-shadow: none !important;
+  }
+  .page-design-copy { display: flex !important; gap: 0 !important; min-width: 0 !important; }
+  .page-design-copy .eyebrow,
+  .page-design-copy small { display: none !important; }
+  .page-design-copy strong {
+    color: #4a3527 !important;
+    font: 500 14px/1.25 var(--serif) !important;
+    letter-spacing: -.01em !important;
+  }
+  .page-design-mode {
+    display: inline-flex !important;
+    justify-self: end !important;
+    padding: 2px !important;
+    gap: 2px !important;
+    border: 1px solid #ddc6ad !important;
+    background: #f0e3d2 !important;
+    border-radius: 1px !important;
+  }
+  .page-design-mode button {
+    min-height: 29px !important;
+    padding: 0 10px !important;
+    border-radius: 1px !important;
+    color: #79614c !important;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+  }
+  .page-design-mode button.selected { background: #98502f !important; color: #fff8ed !important; }
+  .page-template-selectors {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    padding-top: 8px !important;
+    border-top: 1px solid #e5d5c2 !important;
+  }
+  .page-template-select-label {
+    display: flex !important;
+    min-width: 0 !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    color: #8b725b !important;
+    font-size: 8px !important;
+    letter-spacing: .09em !important;
+    text-transform: uppercase !important;
+  }
+  .page-template-select-label select {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 34px !important;
+    padding: 0 10px !important;
+    border: 1px solid #d8bda0 !important;
+    border-radius: 1px !important;
+    background: #fffaf2 !important;
+    color: #5a402e !important;
+    font: 10px var(--serif) !important;
+  }
+
+  /* A4 portrait leaf proportions per page; fixed spread geometry prevents jumping when flipping. */
+  .book-stage-wrap {
+    width: min(100%, 1080px) !important;
+    max-width: 1080px !important;
+    aspect-ratio: 1414 / 1000 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    isolation: isolate !important;
+  }
+  .book-stage-wrap::before {
+    inset: 0 !important;
+    background: url('/assets/open-book-base.png') center / 100% 100% no-repeat !important;
+    filter: drop-shadow(0 13px 17px rgba(76, 44, 26, .24)) !important;
+  }
+  .book-stage { inset: 6.2% 5% 6.8% !important; overflow: visible !important; }
+  .book-spread { grid-template-columns: minmax(0, 1fr) 4.3% minmax(0, 1fr) !important; }
+  .book-side-navigation { position: absolute !important; inset: 0 !important; pointer-events: none !important; }
+  .page-turn-button--side {
+    top: 50% !important;
+    bottom: auto !important;
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid #c7a17f !important;
+    border-radius: 50% !important;
+    background: #fbf5eb !important;
+    color: #82452d !important;
+    box-shadow: 0 3px 9px rgba(73, 44, 25, .14) !important;
+    transform: translateY(-50%) !important;
+    pointer-events: auto !important;
+  }
+  .page-turn-button--previous { left: -18px !important; right: auto !important; }
+  .page-turn-button--next { right: -18px !important; left: auto !important; }
+  .page-turn-footer {
+    width: min(100%, 1080px) !important;
+    max-width: 1080px !important;
+    min-height: 35px !important;
+    margin: 5px auto 0 !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .page-turn-footer .page-count { color: #8b6d54 !important; text-align: center !important; }
+  .page-turn-footer .page-count > span,
+  .page-turn-footer .page-count small { display: none !important; }
+  .page-turn-footer .page-count strong { color: #75472f !important; font-size: 10px !important; }
+  .page-sound-toggle {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    min-height: 28px !important;
+    padding: 0 9px !important;
+    border: 1px solid #d7bea3 !important;
+    border-radius: 999px !important;
+    background: #f8efe2 !important;
+    color: #7d563b !important;
+    font-size: 9px !important;
+  }
+  .page-sound-toggle.is-enabled { background: #ead6be !important; color: #8f452b !important; }
+  .book-stage-decoration { display: none !important; }
+  .book-bottom-note { display: none !important; }
+}
+
+@media screen and (max-width: 760px) {
+  .site-header { padding-inline: 14px !important; }
+  .book-view { padding: 0 14px 24px !important; }
+  .book-heading { grid-template-columns: 1fr !important; gap: 10px !important; padding-top: 13px !important; }
+  .book-heading-copy h1 { font-size: clamp(30px, 7vw, 38px) !important; }
+  .book-actions { justify-content: flex-start !important; flex-wrap: wrap !important; }
+  .book-actions .button { min-height: 32px !important; padding-inline: 9px !important; font-size: 8px !important; }
+  .book-title-row { margin: 8px 0 9px !important; }
+  .book-title-input-wrap { width: min(67vw, 320px) !important; }
+  .page-design-controls { grid-template-columns: minmax(0, 1fr) auto !important; padding: 8px !important; gap: 8px !important; }
+  .page-design-copy strong { font-size: 12px !important; }
+  .page-design-mode button { min-height: 28px !important; padding-inline: 6px !important; font-size: 8px !important; }
+  .page-template-selectors { grid-template-columns: 1fr !important; gap: 8px !important; }
+  .book-stage-wrap { width: 100% !important; max-width: none !important; }
+  .page-turn-button--side { width: 29px !important; height: 29px !important; }
+  .page-turn-button--previous { left: -6px !important; }
+  .page-turn-button--next { right: -6px !important; }
+  .page-turn-footer { width: 100% !important; }
+  .page-sound-toggle { position: static !important; transform: none !important; margin-left: auto !important; }
 }

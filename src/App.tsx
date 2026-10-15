@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import {
 
   ArrowLeft,
-
+  
   ArrowRight,
 
   Camera,
@@ -1050,9 +1050,10 @@ useEffect(() => {
 
             <div className="camera-hero-quote">
 
-              <p>“There’s a whole world out there.”</p>
+              <p>Has the pig escaped again?</p>
+              <p>Oh its LADY Chinki.</p>
 
-              <span>— GILMORE GIRLS</span>
+              <span></span>
 
             </div>
 
@@ -1062,7 +1063,7 @@ useEffect(() => {
 
             <section className="camera-card">
 
-              <div className="camera-card-top"><span><span className="camera-live-dot" /> YOUR CAMERA</span><span>ROLL · 001</span></div>
+              <div className="camera-card-top"><span><span className="camera-live-dot" /> YOUR CAMERA</span></div>
 
               <div className={`camera-viewfinder ${cameraReady ? 'camera-viewfinder--live' : ''}`}>
 
@@ -1072,13 +1073,13 @@ useEffect(() => {
 
                   <div className="viewfinder-corners"><i /><i /><i /><i /></div>
 
-                  <div className="placeholder-message"><Camera size={25} strokeWidth={1.35} /><strong>You know what to do…</strong><span>Start it, click it and make a memory.</span></div>
+                  <div className="placeholder-message"><Camera size={25} strokeWidth={1.35} /><strong>COOL COOL COOL...</strong><span>Start it, pose it and click it!.</span></div> 
 
                 </div>}
 
                 {cameraReady && <div className="viewfinder-corners viewfinder-corners--live"><i /><i /><i /><i /></div>}
 
-                <span className="viewfinder-date">A LITTLE MEMORY · NO. 001</span>
+                
 
               </div>
 
@@ -1096,7 +1097,7 @@ useEffect(() => {
 
             <aside className="booth-side-panel">
 
-              <div className="side-panel-heading"><span className="eyebrow">CHOOSE A FILTER</span><h2>How should it <em>feel?</em></h2><p className="filter-quote">“Different people see the same thing differently.”<span>— PRIDE &amp; PREJUDICE</span></p></div>
+              <div className="side-panel-heading"><span className="eyebrow">CHOOSE A FILTER</span><h2>How should it <em>feel?</em></h2><p className="filter-quote">“I wanna run against the world that is turning”</p></div>
 
               <div className="filter-list">
 

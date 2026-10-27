@@ -3,3 +3,18 @@ dist/
 *.tsbuildinfo
 .DS_Store
 .env
+# Android local and generated files
+android/.gradle/
+android/.idea/
+android/.kotlin/
+android/local.properties
+android/**/build/
+
+# Signing keys and generated installation packages
+*.jks
+*.keystore
+*.apk
+*.aab
+
+# Local editor settings (optional)
+.vscode/

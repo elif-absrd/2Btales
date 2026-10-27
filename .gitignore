@@ -18,3 +18,4 @@ android/**/build/
 
 # Local editor settings (optional)
 .vscode/
+android/app/release/

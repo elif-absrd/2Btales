@@ -231,9 +231,11 @@ export default function App() {
 
   const [filter, setFilter] = useState<PhotoFilter>('autumn');
 
-  const [bookTitle, setBookTitle] = useState('Curly Tales');
+  const [bookTitle, setBookTitle] = useState('piglet');
 
   const [cameraReady, setCameraReady] = useState(false);
+
+  const [cameraFacing, setCameraFacing] = useState<'user' | 'environment'>('user');
 
   const [cameraBusy, setCameraBusy] = useState(false);
 
@@ -429,7 +431,7 @@ const showToast = useCallback((message: string) => setToast(message), []);
 
         setPhotos(loaded);
 
-        if (savedTitle) setBookTitle(savedTitle === 'Our little autumn' ? 'Curly Tales' : savedTitle);
+        if (savedTitle) setBookTitle(savedTitle === 'Our little autumn' ? 'piglet' : savedTitle);
 
         if (typeof savedSpread === 'number') setActiveSpread(Math.min(Math.max(0, savedSpread), Math.max(0, records.length - 1)));
         if (savedPageTemplates && typeof savedPageTemplates === 'object') {
@@ -525,55 +527,63 @@ useEffect(() => {
 
   }, [view]);
 
-  const startCamera = async () => {
-
+  const startCamera = async (
+    facing: 'user' | 'environment' = cameraFacing
+  ) => {
     setError('');
 
     if (!navigator.mediaDevices?.getUserMedia) {
-
-      setError('Camera access is not available here. Open the site in a modern browser over localhost or HTTPS, or upload photos instead.');
-
+      setError('Camera access is not available. Please use HTTPS or upload photos instead.');
       return;
-
     }
 
     setCameraBusy(true);
-
     setCameraReady(false);
 
     try {
-
+      // Stop the previous camera before opening another one.
       streamRef.current?.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
 
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { exact: facing },
+        },
+        audio: false,
+      });
 
       streamRef.current = stream;
+      setCameraFacing(facing);
 
       if (videoRef.current) {
-
         videoRef.current.srcObject = stream;
-
         await videoRef.current.play();
-
       }
 
       setCameraReady(true);
 
     } catch (reason) {
-
-      setError(reason instanceof Error && reason.name === 'NotAllowedError'
-
-        ? 'Camera permission was blocked. Allow camera access in your browser settings, or upload photos instead.'
-
-        : 'Could not open the camera. Check that it is connected and not being used by another app.');
-
+      if (reason instanceof Error && reason.name === 'NotAllowedError') {
+        setError('Camera permission was blocked. Please allow camera access in app settings.');
+      } else if (
+        reason instanceof Error &&
+        ['OverconstrainedError', 'NotFoundError'].includes(reason.name)
+      ) {
+        setError(`The ${facing === 'user' ? 'front' : 'back'} camera is not available.`);
+      } else {
+        setError('Could not open the camera. Please check camera permissions.');
+      }
     } finally {
-
       setCameraBusy(false);
-
     }
-
   };
+  const switchCamera = async () => {
+  const nextFacing = cameraFacing === 'user'
+    ? 'environment'
+    : 'user';
+
+  await startCamera(nextFacing);
+};
 
   const createRecord = async (blob: Blob, caption = '') => {
 
@@ -627,12 +637,12 @@ useEffect(() => {
 
     }
 
-    context.translate(canvas.width, 0);
-
-    context.scale(-1, 1);
+    if (cameraFacing === 'user') {
+      context.translate(canvas.width, 0);
+      context.scale(-1, 1);
+    }
 
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
     canvas.toBlob(async blob => {
 
       if (!blob) {
@@ -797,7 +807,7 @@ useEffect(() => {
 
       await putPhotos(photosRef.current.map((photo, index) => ({ ...toRecord(photo), order: index })));
 
-      await putMeta('bookTitle', bookTitle.trim() || 'Curly Tales');
+      await putMeta('bookTitle', bookTitle.trim() || 'piglet');
 
       await putMeta('activeSpread', activeSpread);
       await putMeta('pageTemplateOverrides', pageTemplateOverrides);
@@ -955,7 +965,7 @@ useEffect(() => {
 
         </div>
 
-        {print && <div className="print-page-header"><span>Curly Tales</span><span>{bookTitle}</span></div>}
+        {print && <div className="print-page-header"><span>piglet</span><span>{bookTitle}</span></div>}
         {print && <div className="print-page-footer"><span>PHOTO MEMORIES</span><span>{String(pageIndex + 1).padStart(2, '0')}</span></div>}
 
       </div>
@@ -990,7 +1000,7 @@ useEffect(() => {
 
           role="status"
 
-          aria-label="Opening Curly Tales"
+          aria-label="Opening piglet"
 
         >
 
@@ -1020,9 +1030,9 @@ useEffect(() => {
 
         {/* <div className="header-note"><LockKeyhole size={14} strokeWidth={1.6} /> {storageReady ? '' : 'Opening your camera…'}</div> */}
 
-        <button className="brand" onClick={() => setView('booth')} aria-label="Curly Tales camera">
+        <button className="brand" onClick={() => setView('booth')} aria-label="piglet camera">
 
-          <span className="brand-wordmark">Curly <em>Tales</em></span>
+          <span className="brand-wordmark"> <em>Tales</em> of piglet</span>
 
         </button>
 
@@ -1067,7 +1077,15 @@ useEffect(() => {
 
               <div className={`camera-viewfinder ${cameraReady ? 'camera-viewfinder--live' : ''}`}>
 
-                <video ref={videoRef} className={`camera-video ${cameraReady ? 'camera-video--live' : ''}`} style={{ filter: filterStyle(filter) }} playsInline muted />
+                <video
+                  ref={videoRef}
+                  className={`camera-video ${cameraReady ? 'camera-video--live' : ''} ${
+                    cameraFacing === 'user' ? 'camera-video--mirrored' : ''
+                  }`}
+                  style={{ filter: filterStyle(filter) }}
+                  playsInline
+                  muted
+                />
 
                 {!cameraReady && <div className="camera-placeholder">
 
@@ -1085,11 +1103,48 @@ useEffect(() => {
 
               <div className="camera-controls">
 
-                {cameraReady ? <button className="button button-primary shutter-button" onClick={() => void capturePhoto()}><span className="shutter-ring"><span /></span> Capture this moment</button> : <button className="button button-primary shutter-button" disabled={cameraBusy} onClick={() => void startCamera()}><Camera size={17} /> {cameraBusy ? 'Opening camera…' : 'Open the camera'}</button>}
+                {cameraReady ? (
+                  <>
+                    <button
+                      className="button button-primary shutter-button"
+                      onClick={() => void capturePhoto()}
+                    >
+                      <span className="shutter-ring">
+                        <span />
+                      </span>
+                      Capture this moment
+                    </button>
 
-                {cameraReady && <button className="button button-outline" onClick={startCamera}><RefreshCw size={15} /> Try camera again</button>}
+                    <button
+                      className="button button-outline"
+                      disabled={cameraBusy}
+                      onClick={() => void switchCamera()}
+                    >
+                      <RefreshCw size={15} />
+                      {cameraFacing === 'user'
+                        ? 'Use back camera'
+                        : 'Use front camera'}
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="button button-primary shutter-button"
+                    disabled={cameraBusy}
+                    onClick={() => void startCamera()}
+                  >
+                    <Camera size={17} />
+                    {cameraBusy ? 'Opening camera…' : 'Open the camera'}
+                  </button>
+                )}
 
-                <button className="button button-outline upload-button" onClick={() => fileInputRef.current?.click()}><Upload size={16} /> Choose photos</button>
+                <button
+                  className="button button-outline upload-button"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload size={16} />
+                  Choose photos
+                </button> 
+                
 
               </div>
 
@@ -1133,7 +1188,7 @@ useEffect(() => {
 
           </div>
 
-          <div className="book-title-row"><div className="book-title-input-wrap"><input className="book-title-input" aria-label="Photobook title" value={bookTitle} onChange={event => setBookTitle(event.target.value)} onBlur={() => void putMeta('bookTitle', bookTitle.trim() || 'Curly Tales')} /><span className="title-rule" /></div><div className="book-meta"><span className="status-dot" /><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span></div></div>
+          <div className="book-title-row"><div className="book-title-input-wrap"><input className="book-title-input" aria-label="Photobook title" value={bookTitle} onChange={event => setBookTitle(event.target.value)} onBlur={() => void putMeta('bookTitle', bookTitle.trim() || 'piglet')} /><span className="title-rule" /></div><div className="book-meta"><span className="status-dot" /><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span></div></div>
 
           
 
@@ -1202,7 +1257,7 @@ useEffect(() => {
 
       <div className="print-book" aria-hidden="true">
 
-        <div className="print-cover"><div className="print-cover-kicker">CURLY TALES</div><Leaf size={44} strokeWidth={1} /><h1>{bookTitle}</h1><p>Photo scrapbook</p><span>✳</span></div>
+        <div className="print-cover"><div className="print-cover-kicker">piglet</div><Leaf size={44} strokeWidth={1} /><h1>{bookTitle}</h1><p>Photo scrapbook</p><span>✳</span></div>
 
         {Array.from({ length: totalPages }, (_, pageIndex) => (
         <Fragment key={`print-page-${pageIndex}`}>
@@ -1220,7 +1275,7 @@ useEffect(() => {
 
       {saving && <div className="saving-indicator no-print"><span className="saving-spinner" /> Saving your memories</div>}
 
-      <footer className="mobile-footer no-print"><span>Curly Tales</span><span>Made of little moments</span></footer>
+      <footer className="mobile-footer no-print"><span>piglet</span><span>Made of little moments</span></footer>
 
     </div>
 

@@ -133,7 +133,19 @@ h1 em, h2 em { color: var(--rust); font-weight: 500; }
 .camera-card-top span:first-child, .camera-card-bottom span { display: inline-flex; align-items: center; gap: 7px; }
 .camera-live-dot { width: 5px; height: 5px; background: #9e583e; display: inline-block; border-radius: 50%; }
 .camera-viewfinder { aspect-ratio: 4 / 3; min-height: 260px; background: #ded0b4; position: relative; overflow: hidden; }
-.camera-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scaleX(-1); transition: opacity .35s ease; }
+.camera-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.camera-video--mirrored {
+  transform: scaleX(-1);
+}
 .camera-video--live { opacity: 1; filter: sepia(.2) saturate(.9); }
 .camera-placeholder { position: absolute; inset: 0; overflow: hidden; }
 .placeholder-sky { position: absolute; inset: 0; background: linear-gradient(180deg, #cfb48b 0%, #e6c99b 54%, #a8a581 55%, #777d5c 100%); }
@@ -2154,7 +2166,7 @@ body {
 }
 
 
-/* Curly Tales: restrained wordmark and direct-to-camera interface */
+/* piglet: restrained wordmark and direct-to-camera interface */
 .brand-wordmark {
   display: inline-block;
   color: #4a3325;
@@ -2246,7 +2258,7 @@ body {
   .page-heading--camera h1 { font-size: clamp(44px, 10vw, 60px); }
 }
 
-/* Curly Tales loader: the portrait blooms in, while individual curl-locks grow and twinkle. */
+/* piglet loader: the portrait blooms in, while individual curl-locks grow and twinkle. */
 .loader-portrait {
   clip-path: ellipse(0% 0% at 50% 31%);
   opacity: 0;
@@ -2308,7 +2320,7 @@ body {
   .hair-glints, .hair-glints path, .hair-glints circle { animation: none !important; opacity: .85 !important; }
 }
 
-/* Curly Tales loader v2: abstract profile with root-to-tip, connected curl growth. */
+/* piglet loader v2: abstract profile with root-to-tip, connected curl growth. */
 .loader-portrait-stage--lineart {
   width: min(68vh, 400px);
   height: auto;
@@ -2391,7 +2403,7 @@ body {
   .loader-leaf, .loader-twinkle, .loader-dust { animation: none !important; opacity: .85 !important; }
 }
 
-/* Curly Tales loader: reveal the supplied portrait itself; never draw replacement hair. */
+/* piglet loader: reveal the supplied portrait itself; never draw replacement hair. */
 .loader-portrait-stage--art {
   position: relative !important;
   display: block !important;
@@ -2470,7 +2482,7 @@ body {
 }
 
 
-/* Curly Tales loader: reveal the supplied illustration itself, growing outward from the curl roots. */
+/* piglet loader: reveal the supplied illustration itself, growing outward from the curl roots. */
 .intro-loader {
   background: #f3ead9 !important;
 }
@@ -2557,7 +2569,7 @@ body {
   }
 }
 
-/* Curly Tales custom collage book: supplied page art with real photo windows. */
+/* piglet custom collage book: supplied page art with real photo windows. */
 .page-design-controls {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) auto;
@@ -2630,7 +2642,7 @@ body {
 }
 
 
-/* Curly Tales: tactile, 3D page-turn animation */
+/* piglet: tactile, 3D page-turn animation */
 .book-stage {
   perspective: 2200px;
   perspective-origin: 50% 48%;
@@ -2747,7 +2759,7 @@ body {
   }
 }
 
-/* Curly Tales navigation + stable stage height during the flip */
+/* piglet navigation + stable stage height during the flip */
 .book-stage-wrap {
   position: relative;
   overflow: visible;
@@ -2894,7 +2906,7 @@ body {
 
 
 /* --------------------------------------------------------------------------
-   CURLY TALES — personal camera refresh
+   piglet — personal camera refresh
    Keeps CS Claire Mono throughout. App behavior and scrapbook templates stay
    unchanged; these rules refine only the presentation.
    -------------------------------------------------------------------------- */
@@ -3267,7 +3279,7 @@ html, body, button, input, select, textarea,
 }
 
 /* --------------------------------------------------------------------------
-   Photo booth art direction: match the supplied Curly Tales reference.
+   Photo booth art direction: match the supplied piglet reference.
    CS Claire Mono remains the only typeface throughout.
    -------------------------------------------------------------------------- */
 .page-heading--camera {
@@ -3687,7 +3699,7 @@ html, body, button, input, select, textarea,
 }
 
 
-/* Curly Tales: exact Autumn palette from the supplied reference board. */
+/* piglet: exact Autumn palette from the supplied reference board. */
 :root {
   --cream: #F4EEE5;
   --paper: #FBF7F0;
@@ -3870,7 +3882,7 @@ body,
 }
 
 
-/* Curly Tales — fixed-size A4 book spread with a tactile leather binding */
+/* piglet — fixed-size A4 book spread with a tactile leather binding */
 .book-view {
   max-width: 1280px !important;
   padding: 0 clamp(14px, 3vw, 36px) 42px !important;
@@ -4246,7 +4258,7 @@ body,
   .page-turn-button--next { right: 40% !important; }
 }
 
-/* Curly Tales supplied collages: photos sit underneath each PNG's transparent cut-outs. */
+/* piglet supplied collages: photos sit underneath each PNG's transparent cut-outs. */
 .page-design-controls {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto !important;
@@ -4721,7 +4733,7 @@ img.page-template-overlay {
   .page-sound-toggle { font-size: 8px !important; padding: 0 7px !important; }
 }
 
-/* Curly Tales autumn polish — compact hierarchy, calm spacing and no redundant icons/copy. */
+/* piglet autumn polish — compact hierarchy, calm spacing and no redundant icons/copy. */
 @media screen {
   .app-shell {
     background:

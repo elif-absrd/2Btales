@@ -1883,7 +1883,6 @@ h1 em, h2 em {
   .intro-loader, .loader-inner, .loader-portrait, .curl-path, .curl-sprout, .loader-progress span { animation: none !important; }
 }
 
-
 .paper-page.page-theme-1 { background-color: #f1dfc2; }
 .paper-page.page-theme-2 { background-color: #f7ecd8; background-image: radial-gradient(ellipse at 70% 23%, rgba(188, 137, 76, .13), transparent 44%), repeating-linear-gradient(0deg, rgba(111, 78, 48, .035) 0 1px, transparent 1px 5px); }
 .paper-page.page-theme-3 { background-color: #f0e3cd; }
@@ -2164,7 +2163,6 @@ body {
   .loader-portrait { animation: none !important; opacity: 1; transform: none; }
   .curl-path, .curl-sprout { animation: none !important; stroke-dashoffset: 0; }
 }
-
 
 /* piglet: restrained wordmark and direct-to-camera interface */
 .brand-wordmark {
@@ -2481,7 +2479,6 @@ body {
   .portrait-twinkle { animation: none !important; opacity: .55; }
 }
 
-
 /* piglet loader: reveal the supplied illustration itself, growing outward from the curl roots. */
 .intro-loader {
   background: #f3ead9 !important;
@@ -2640,7 +2637,6 @@ body {
   .paper-page--template { height: 180mm !important; min-height: 0 !important; aspect-ratio: auto !important; box-shadow: none !important; page-break-inside: avoid; }
   .template-page-canvas { position: absolute !important; inset: 0 !important; }
 }
-
 
 /* piglet: tactile, 3D page-turn animation */
 .book-stage {
@@ -2903,7 +2899,6 @@ body {
   .page-turn-button--side,
   .page-sound-toggle { transition: none !important; }
 }
-
 
 /* --------------------------------------------------------------------------
    piglet — personal camera refresh
@@ -3566,7 +3561,6 @@ html, body, button, input, select, textarea,
   .button-book-link { margin-top: 12px; }
 }
 
-
 /* Final layout correction: compact left-aligned navigation and a book-like spread. */
 .site-header {
   height: 64px !important;
@@ -3697,7 +3691,6 @@ html, body, button, input, select, textarea,
   .book-stage-wrap { padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; }
   .book-gutter { background: transparent !important; box-shadow: none !important; }
 }
-
 
 /* piglet: exact Autumn palette from the supplied reference board. */
 :root {
@@ -3880,7 +3873,6 @@ body,
 @media print {
   .book-stage-wrap { background: transparent !important; }
 }
-
 
 /* piglet — fixed-size A4 book spread with a tactile leather binding */
 .book-view {
@@ -5015,3 +5007,14 @@ img.page-template-overlay {
   .page-turn-footer { width: 100% !important; }
   .page-sound-toggle { position: static !important; transform: none !important; margin-left: auto !important; }
 }
+
+
+/* Local autosave state; existing site and A4 print rules remain unchanged. */
+.auto-save-label {
+  padding-left: 8px;
+  border-left: 1px solid #dfd1bf;
+  color: #7f8058;
+  font-size: 8px;
+}
+.auto-save-label--saving { color: #9a7554; }
+.auto-save-label--error { color: #a95236; }

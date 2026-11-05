@@ -2,10 +2,14 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 
 import type { ChangeEvent } from 'react';
 
+import { Capacitor } from '@capacitor/core';
+
+import { Printer } from '@capgo/capacitor-printer';
+
 import {
 
   ArrowLeft,
-  
+
   ArrowRight,
 
   Camera,
@@ -42,64 +46,202 @@ import type { PhotoFilter, PhotoRecord, PhotoView } from './types';
 
 type View = 'booth' | 'book';
 
-type PageTemplateId = 'autumn-memory' | 'music-collage' | 'vinyl-pop' | 'webhead';
+type PageTemplateId = 'autumn-memory' | 'music-collage' | 'vinyl-pop' | 'webhead' | 'hozier-moodboard' | 'hozier-unreal-unearth' | 'starry-memories' | 'paris-postcards' | 'botanical-night' | 'sunflower-notes' | 'spider-comic';
+
 type PageTemplateMode = 'auto' | 'manual';
 
 type TemplateSlot = {
+
   left: number;
+
   top: number;
+
   width: number;
+
   height: number;
+
   rotation?: number;
+
+  clipPath?: string;
+
 };
 
 type PageTemplate = { id: PageTemplateId; name: string; src: string; slots: TemplateSlot[] };
+
 type ResolvedPage = { pageIndex: number; template: PageTemplate; photos: PhotoView[] };
+
 type TurnDirection = 'next' | 'previous';
+
 type TurnAnimation = { from: number; to: number; direction: TurnDirection } | null;
 
 // Slot coordinates are measured from the transparent photo cut-outs in the supplied PNGs.
+
 // The art layer stays above each photo so all frames, stickers and borders remain visible.
+
 const PAGE_TEMPLATES: PageTemplate[] = [
+
   {
+
     id: 'autumn-memory',
+
     name: 'Autumn keepsake',
+
     src: '/templates/autumn-memory.png',
+
     slots: [
+
       { left: 32.4, top: 13.0, width: 56.1, height: 23.25 },
+
       { left: 8.0, top: 36.3, width: 43.4, height: 25.8 },
+
       { left: 58.4, top: 56.5, width: 19.7, height: 15.7 },
+
     ],
+
   },
+
   {
+
     id: 'music-collage',
+
     name: 'Music & memories',
+
     src: '/templates/music-collage.png',
+
     slots: [
+
       { left: 4.3, top: 1.3, width: 41.3, height: 26.5 },
+
       { left: 6.4, top: 32.2, width: 35.1, height: 25.5 },
+
       { left: 62.3, top: 50.0, width: 22.2, height: 10.95 },
+
       { left: 36.8, top: 78.0, width: 24.9, height: 12.2 },
+
     ],
+
   },
+
   {
+
     id: 'vinyl-pop',
+
     name: 'Vinyl & pop',
+
     src: '/templates/vinyl-pop.png',
+
     slots: [
+
       { left: 32.1, top: 11.8, width: 38.9, height: 24.0 },
+
       { left: 47.8, top: 39.0, width: 41.5, height: 19.8 },
+
       { left: 31.25, top: 67.3, width: 34.5, height: 18.0 },
+
+    ],
+
+  },
+
+  {
+
+    id: 'webhead',
+
+    name: 'Spider-Man comic',
+
+    src: '/templates/webhead.png',
+
+    slots: [
+
+      { left: 4.0, top: 2.25, width: 44.1, height: 25.4 },
+
+      { left: 33.8, top: 33.5, width: 29.2, height: 26.2 },
+
+      { left: 51.7, top: 62.45, width: 43.2, height: 25.0 },
+
+    ],
+
+  },
+
+  {
+    id: 'hozier-moodboard',
+    name: 'Hozier moodboard (decorative)',
+    src: '/templates/hozier-moodboard.png',
+    // This artwork has no blank photo frames, so it is a decorative page.
+    slots: [],
+  },
+
+  {
+    id: 'hozier-unreal-unearth',
+    name: 'Hozier · Unreal Unearth',
+    src: '/templates/hozier-unreal-unearth.png',
+    // Three tilted photo openings in the supplied Hozier collage.
+    slots: [
+      {
+        left: 14.453, top: 22.010, width: 32.412, height: 21.172,
+        clipPath: 'polygon(88.20% 0%, 0% 9.60%, 11.48% 99.72%, 99.67% 91.53%)',
+      },
+      {
+        left: 48.990, top: 41.029, width: 43.677, height: 26.615,
+        clipPath: 'polygon(12.41% 0%, 99.76% 9.66%, 87.59% 99.78%, 0% 90.34%)',
+      },
+      {
+        left: 9.139, top: 61.842, width: 34.113, height: 22.069,
+        clipPath: 'polygon(88.79% 0%, 0% 12.74%, 12.46% 99.73%, 99.69% 90.00%)',
+      },
     ],
   },
+
   {
-    id: 'webhead',
-    name: 'Spider-Man comic',
-    src: '/templates/webhead.png',
+    id: 'starry-memories',
+    name: 'Starry memories',
+    src: '/templates/starry-memories.png',
     slots: [
-      { left: 4.0, top: 2.25, width: 44.1, height: 25.4 },
-      { left: 33.8, top: 33.5, width: 29.2, height: 26.2 },
-      { left: 51.7, top: 62.45, width: 43.2, height: 25.0 },
+      { left: 53.668, top: 4.128, width: 39.538, height: 21.407, clipPath: 'polygon(7.90% 0.00%, 100.00% 8.57%, 91.75% 100.00%, 0.00% 92.14%)' },
+      { left: 1.902, top: 24.006, width: 43.478, height: 23.93, clipPath: 'polygon(82.19% 0.00%, 0.00% 18.53%, 17.81% 100.00%, 100.00% 81.15%)' },
+      { left: 14.674, top: 63.226, width: 44.701, height: 25.535, clipPath: 'polygon(88.75% 0.00%, 0.00% 11.38%, 11.25% 100.00%, 100.00% 88.62%)' },
+    ],
+  },
+
+  {
+    id: 'paris-postcards',
+    name: 'Paris postcards',
+    src: '/templates/paris-postcards.png',
+    slots: [
+      { left: 10.667, top: 47.083, width: 59.259, height: 48.083, clipPath: 'polygon(9.00% 0.00%, 100.00% 4.16%, 91.25% 100.00%, 0.00% 96.01%)' },
+      { left: 30.815, top: 6.417, width: 61.63, height: 49.5, clipPath: 'polygon(0.00% 4.55%, 90.14% 0.00%, 100.00% 95.62%, 9.86% 100.00%)' },
+    ],
+  },
+
+  {
+    id: 'botanical-night',
+    name: 'Botanical night',
+    src: '/templates/botanical-night.png',
+    slots: [
+      { left: 0.951, top: 2.446, width: 54.484, height: 19.19, clipPath: 'polygon(0.00% 11.55%, 95.76% 0.00%, 100.00% 90.84%, 4.49% 100.00%)' },
+      { left: 67.391, top: 6.498, width: 32.609, height: 20.489, clipPath: 'polygon(17.92% 0.00%, 100.00% 14.18%, 93.75% 100.00%, 0.00% 83.96%)' },
+      { left: 61.141, top: 24.847, width: 36.413, height: 20.489, clipPath: 'polygon(16.04% 0.00%, 100.00% 16.04%, 83.96% 100.00%, 0.00% 83.58%)' },
+      { left: 50.136, top: 42.661, width: 41.168, height: 21.024, clipPath: 'polygon(14.19% 0.00%, 100.00% 18.18%, 85.81% 100.00%, 0.00% 81.82%)' },
+      { left: 48.505, top: 61.544, width: 36.549, height: 20.489, clipPath: 'polygon(16.36% 0.00%, 100.00% 16.04%, 83.64% 100.00%, 0.00% 83.96%)' },
+    ],
+  },
+
+  {
+    id: 'sunflower-notes',
+    name: 'Sunflower notes',
+    src: '/templates/sunflower-notes.png',
+    slots: [
+      { left: 10.326, top: 7.722, width: 37.772, height: 20.642, clipPath: 'polygon(12.95% 0.00%, 100.00% 13.33%, 81.65% 100.00%, 0.00% 86.67%)' },
+      { left: 2.174, top: 40.061, width: 39.13, height: 22.095, clipPath: 'polygon(0.00% 11.42%, 88.89% 0.00%, 100.00% 88.93%, 11.11% 100.00%)' },
+      { left: 17.255, top: 71.942, width: 39.266, height: 22.171, clipPath: 'polygon(16.96% 0.00%, 100.00% 16.55%, 83.04% 100.00%, 0.00% 83.79%)' },
+    ],
+  },
+
+  {
+    id: 'spider-comic',
+    name: 'Spider-Man photo frame',
+    src: '/templates/spider-comic.png',
+    slots: [
+      { left: 9.783, top: 16.972, width: 80.299, height: 51.07, clipPath: 'polygon(0.00% 0.00%, 100.00% 0.00%, 100.00% 100.00%, 0.00% 100.00%)' },
     ],
   },
 ];
@@ -109,10 +251,18 @@ const AUTO_TEMPLATE_SEQUENCE: PageTemplateId[] = [
   'music-collage',
   'vinyl-pop',
   'webhead',
+  'starry-memories',
+  'paris-postcards',
+  'botanical-night',
+  'sunflower-notes',
+  'spider-comic',
+  'hozier-unreal-unearth',
 ];
 
 const TEMPLATE_BY_ID = Object.fromEntries(
+
   PAGE_TEMPLATES.map(template => [template.id, template]),
+
 ) as Record<PageTemplateId, PageTemplate>;
 
 const FILTERS: { id: PhotoFilter; name: string; description: string; css: string; image: string }[] = [
@@ -243,6 +393,8 @@ export default function App() {
 
   const [saving, setSaving] = useState(false);
 
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
+
   const [toast, setToast] = useState('');
 
   const [error, setError] = useState('');
@@ -266,34 +418,57 @@ export default function App() {
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const resolvedPages = useMemo<ResolvedPage[]>(() => {
+
     const pages: ResolvedPage[] = [];
+
     let photoCursor = 0;
+
     let pageIndex = 0;
 
     // Each page consumes the number of photos that fit its selected collage artwork.
+
     while (photoCursor < photos.length || pages.length < 2) {
+
       const automaticId = AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
+
       const templateId = pageTemplateMode === 'manual'
+
         ? pageTemplateOverrides[String(pageIndex)] ?? automaticId
+
         : automaticId;
+
       const template = TEMPLATE_BY_ID[templateId] ?? TEMPLATE_BY_ID[automaticId];
+
       const pagePhotos = photos.slice(photoCursor, photoCursor + template.slots.length);
+
       pages.push({ pageIndex, template, photos: pagePhotos });
+
       photoCursor += template.slots.length;
+
       pageIndex += 1;
+
       if (pageIndex > photos.length + 5) break;
+
     }
 
     if (pages.length % 2 !== 0) {
+
       const pageIndex = pages.length;
+
       const automaticId = AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
+
       const templateId = pageTemplateMode === 'manual'
+
         ? pageTemplateOverrides[String(pageIndex)] ?? automaticId
+
         : automaticId;
+
       pages.push({ pageIndex, template: TEMPLATE_BY_ID[templateId] ?? TEMPLATE_BY_ID[automaticId], photos: [] });
+
     }
 
     return pages;
+
   }, [photos, pageTemplateMode, pageTemplateOverrides]);
 
   const spreadCount = Math.max(1, Math.ceil(resolvedPages.length / 2));
@@ -325,23 +500,33 @@ export default function App() {
   }, [pageTurnSoundEnabled]);
 
   const flipSpread = useCallback((direction: TurnDirection) => {
+
     if (turnAnimation || turnTimerRef.current !== null) return;
 
     const nextIndex = direction === 'next'
+
       ? Math.min(spreadCount - 1, activeSpread + 1)
+
       : Math.max(0, activeSpread - 1);
 
     if (nextIndex === activeSpread) return;
 
     playPageTurnSound();
+
     setTurnAnimation({ from: activeSpread, to: nextIndex, direction });
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     turnTimerRef.current = window.setTimeout(() => {
+
       setActiveSpread(nextIndex);
+
       setTurnAnimation(null);
+
       turnTimerRef.current = null;
+
     }, reducedMotion ? 80 : 880);
+
   }, [activeSpread, playPageTurnSound, spreadCount, turnAnimation]);
 
 const showToast = useCallback((message: string) => setToast(message), []);
@@ -415,12 +600,19 @@ const showToast = useCallback((message: string) => setToast(message), []);
     let cancelled = false;
 
     Promise.all([
+
       getAllPhotos(),
+
       getMeta<string>('bookTitle'),
+
       getMeta<number>('activeSpread'),
+
       getMeta<Record<string, PageTemplateId>>('pageTemplateOverrides'),
+
       getMeta<PageTemplateMode>('pageTemplateMode'),
+
     ])
+
       .then(([records, savedTitle, savedSpread, savedPageTemplates, savedTemplateMode]) => {
 
         if (cancelled) return;
@@ -434,13 +626,21 @@ const showToast = useCallback((message: string) => setToast(message), []);
         if (savedTitle) setBookTitle(savedTitle === 'Our little autumn' ? 'piglet' : savedTitle);
 
         if (typeof savedSpread === 'number') setActiveSpread(Math.min(Math.max(0, savedSpread), Math.max(0, records.length - 1)));
+
         if (savedPageTemplates && typeof savedPageTemplates === 'object') {
+
           const validOverrides: Record<string, PageTemplateId> = {};
+
           for (const [key, value] of Object.entries(savedPageTemplates)) {
+
             if (PAGE_TEMPLATES.some(template => template.id === value)) validOverrides[key] = value as PageTemplateId;
+
           }
+
           setPageTemplateOverrides(validOverrides);
+
         }
+
         if (savedTemplateMode === 'auto' || savedTemplateMode === 'manual') setPageTemplateMode(savedTemplateMode);
 
         setStorageReady(true);
@@ -487,24 +687,62 @@ const showToast = useCallback((message: string) => setToast(message), []);
 
   }, [toast]);
 
-  useEffect(() => {
-
-    if (view === 'book') void putMeta('activeSpread', activeSpread).catch(() => undefined);
-
-  }, [activeSpread, view]);
-
+  // Persist all book settings automatically. Photo blobs are already written
+  // immediately by capture, upload, caption, delete, and reorder operations.
   useEffect(() => {
     if (!storageReady) return;
-    void putMeta('pageTemplateOverrides', pageTemplateOverrides).catch(() => undefined);
-  }, [pageTemplateOverrides, storageReady]);
 
-  useEffect(() => {
-    if (!storageReady) return;
-    void putMeta('pageTemplateMode', pageTemplateMode).catch(() => undefined);
-  }, [pageTemplateMode, storageReady]);
+    let cancelled = false;
+
+    const persistMetadata = async () => {
+      await Promise.all([
+        putMeta('bookTitle', bookTitle.trim() || 'piglet'),
+        putMeta('activeSpread', activeSpread),
+        putMeta('pageTemplateOverrides', pageTemplateOverrides),
+        putMeta('pageTemplateMode', pageTemplateMode),
+      ]);
+    };
+
+    setAutoSaveStatus('saving');
+
+    // Debounce title/page-setting edits so rapid changes don't create
+    // unnecessary IndexedDB transactions.
+    const timer = window.setTimeout(() => {
+      void persistMetadata()
+        .then(() => {
+          if (!cancelled) setAutoSaveStatus('saved');
+        })
+        .catch(reason => {
+          console.error('Automatic scrapbook save failed:', reason);
+          if (!cancelled) setAutoSaveStatus('error');
+        });
+    }, 350);
+
+    // Best-effort final write when the tab is closed or the app goes to background.
+    const flushMetadata = () => {
+      void persistMetadata().catch(reason => {
+        console.error('Could not save scrapbook settings before leaving:', reason);
+      });
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') flushMetadata();
+    };
+
+    window.addEventListener('pagehide', flushMetadata);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      window.removeEventListener('pagehide', flushMetadata);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [storageReady, bookTitle, activeSpread, pageTemplateOverrides, pageTemplateMode]);
 
   const choosePageTemplate = (pageIndex: number, templateId: PageTemplateId) => {
+
     setPageTemplateOverrides(current => ({ ...current, [String(pageIndex)]: templateId }));
+
   };
 
   useEffect(() => {
@@ -528,61 +766,99 @@ useEffect(() => {
   }, [view]);
 
   const startCamera = async (
+
     facing: 'user' | 'environment' = cameraFacing
+
   ) => {
+
     setError('');
 
     if (!navigator.mediaDevices?.getUserMedia) {
+
       setError('Camera access is not available. Please use HTTPS or upload photos instead.');
+
       return;
+
     }
 
     setCameraBusy(true);
+
     setCameraReady(false);
 
     try {
+
       // Stop the previous camera before opening another one.
+
       streamRef.current?.getTracks().forEach(track => track.stop());
+
       streamRef.current = null;
 
       const stream = await navigator.mediaDevices.getUserMedia({
+
         video: {
+
           facingMode: { exact: facing },
+
         },
+
         audio: false,
+
       });
 
       streamRef.current = stream;
+
       setCameraFacing(facing);
 
       if (videoRef.current) {
+
         videoRef.current.srcObject = stream;
+
         await videoRef.current.play();
+
       }
 
       setCameraReady(true);
 
     } catch (reason) {
+
       if (reason instanceof Error && reason.name === 'NotAllowedError') {
+
         setError('Camera permission was blocked. Please allow camera access in app settings.');
+
       } else if (
+
         reason instanceof Error &&
+
         ['OverconstrainedError', 'NotFoundError'].includes(reason.name)
+
       ) {
+
         setError(`The ${facing === 'user' ? 'front' : 'back'} camera is not available.`);
+
       } else {
+
         setError('Could not open the camera. Please check camera permissions.');
+
       }
+
     } finally {
+
       setCameraBusy(false);
+
     }
+
   };
+
   const switchCamera = async () => {
+
   const nextFacing = cameraFacing === 'user'
+
     ? 'environment'
+
     : 'user';
 
   await startCamera(nextFacing);
+
 };
 
   const createRecord = async (blob: Blob, caption = '') => {
@@ -638,11 +914,15 @@ useEffect(() => {
     }
 
     if (cameraFacing === 'user') {
+
       context.translate(canvas.width, 0);
+
       context.scale(-1, 1);
+
     }
 
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
     canvas.toBlob(async blob => {
 
       if (!blob) {
@@ -810,7 +1090,9 @@ useEffect(() => {
       await putMeta('bookTitle', bookTitle.trim() || 'piglet');
 
       await putMeta('activeSpread', activeSpread);
+
       await putMeta('pageTemplateOverrides', pageTemplateOverrides);
+
       await putMeta('pageTemplateMode', pageTemplateMode);
 
       showToast('Scrapbook saved on this device.');
@@ -827,18 +1109,33 @@ useEffect(() => {
 
   };
 
-  const downloadBook = () => {
-
+  const downloadBook = async () => {
     if (!photos.length) {
-
       showToast('Add photos before printing your scrapbook.');
-
       return;
-
     }
 
-    window.print();
+    try {
+      // Make sure the latest title and page selection are committed before printing.
+      await Promise.all([
+        putMeta('bookTitle', bookTitle.trim() || 'piglet'),
+        putMeta('activeSpread', activeSpread),
+        putMeta('pageTemplateOverrides', pageTemplateOverrides),
+        putMeta('pageTemplateMode', pageTemplateMode),
+      ]);
 
+      if (Capacitor.isNativePlatform()) {
+        // Android uses the native PrintManager, which applies the existing
+        // @media print A4 layout and offers Android's "Save as PDF" destination.
+        const printName = (bookTitle.trim() || 'piglet').replace(/[\/:*?"<>|]/g, '-').slice(0, 50);
+        await Printer.printWebView({ name: `${printName} - Photo scrapbook` });
+      } else {
+        // Keep the current laptop/browser print layout exactly as it is.
+        window.print();
+      }
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'Could not open the PDF/print dialog. Please try again.');
+    }
   };
 
   const pageLabel = useMemo(() => `${Math.min(shownPageStart, totalPages)}–${Math.min(shownPageStart + 1, totalPages)} of ${totalPages}`, [shownPageStart, totalPages]);
@@ -878,20 +1175,18 @@ useEffect(() => {
             if (!photo) return null;
 
             const slotStyle = {
-
               left: `${slot.left}%`,
-
               top: `${slot.top}%`,
-
               width: `${slot.width}%`,
-
               height: `${slot.height}%`,
-
               transform: slot.rotation ? `rotate(${slot.rotation}deg)` : undefined,
-
               transformOrigin: 'center center',
-
             };
+
+            // Clip the photo to the tilted opening in each supplied collage.
+            const photoSlotStyle = slot.clipPath
+              ? { ...slotStyle, clipPath: slot.clipPath, WebkitClipPath: slot.clipPath }
+              : slotStyle;
 
             return (
 
@@ -901,7 +1196,7 @@ useEffect(() => {
 
                   className={`template-photo-slot ${draggedPhotoId === photo.id ? 'is-dragging' : ''}`}
 
-                  style={slotStyle}
+                  style={photoSlotStyle}
 
                   draggable={!print}
 
@@ -966,6 +1261,7 @@ useEffect(() => {
         </div>
 
         {print && <div className="print-page-header"><span>piglet</span><span>{bookTitle}</span></div>}
+
         {print && <div className="print-page-footer"><span>PHOTO MEMORIES</span><span>{String(pageIndex + 1).padStart(2, '0')}</span></div>}
 
       </div>
@@ -1054,13 +1350,14 @@ useEffect(() => {
 
           <div className="page-heading page-heading--camera">
 
-            <div className="eyebrow"><span className="eyebrow-line" /> A LITTLE PHOTO SESSION</div>
+            <div className="eyebrow"><span className="eyebrow-line" />Chinki</div>
 
-            <h1>To your little <em>moment.</em></h1>
+            <h1>To your <em>little</em> moment.</h1>
 
             <div className="camera-hero-quote">
 
               <p>Has the pig escaped again?</p>
+
               <p>Oh its LADY Chinki.</p>
 
               <span></span>
@@ -1078,73 +1375,114 @@ useEffect(() => {
               <div className={`camera-viewfinder ${cameraReady ? 'camera-viewfinder--live' : ''}`}>
 
                 <video
+
                   ref={videoRef}
+
                   className={`camera-video ${cameraReady ? 'camera-video--live' : ''} ${
+
                     cameraFacing === 'user' ? 'camera-video--mirrored' : ''
+
                   }`}
+
                   style={{ filter: filterStyle(filter) }}
+
                   playsInline
+
                   muted
+
                 />
 
                 {!cameraReady && <div className="camera-placeholder">
 
                   <div className="viewfinder-corners"><i /><i /><i /><i /></div>
 
-                  <div className="placeholder-message"><Camera size={25} strokeWidth={1.35} /><strong>COOL COOL COOL...</strong><span>Start it, pose it and click it!.</span></div> 
+                  <div className="placeholder-message"><Camera size={25} strokeWidth={1.35} /><strong>COOL COOL COOL...</strong><span>Start it, pose it and click it!.</span></div>&#x20;
 
                 </div>}
 
                 {cameraReady && <div className="viewfinder-corners viewfinder-corners--live"><i /><i /><i /><i /></div>}
-
-                
 
               </div>
 
               <div className="camera-controls">
 
                 {cameraReady ? (
+
                   <>
+
                     <button
+
                       className="button button-primary shutter-button"
+
                       onClick={() => void capturePhoto()}
+
                     >
+
                       <span className="shutter-ring">
+
                         <span />
+
                       </span>
+
                       Capture this moment
+
                     </button>
 
                     <button
+
                       className="button button-outline"
+
                       disabled={cameraBusy}
+
                       onClick={() => void switchCamera()}
+
                     >
+
                       <RefreshCw size={15} />
+
                       {cameraFacing === 'user'
+
                         ? 'Use back camera'
+
                         : 'Use front camera'}
+
                     </button>
+
                   </>
+
                 ) : (
+
                   <button
+
                     className="button button-primary shutter-button"
+
                     disabled={cameraBusy}
+
                     onClick={() => void startCamera()}
+
                   >
+
                     <Camera size={17} />
+
                     {cameraBusy ? 'Opening camera…' : 'Open the camera'}
+
                   </button>
+
                 )}
 
                 <button
+
                   className="button button-outline upload-button"
+
                   onClick={() => fileInputRef.current?.click()}
+
                 >
+
                   <Upload size={16} />
+
                   Choose photos
-                </button> 
-                
+
+                </button>&#x20;
 
               </div>
 
@@ -1182,39 +1520,60 @@ useEffect(() => {
 
           <div className="book-heading">
 
-            <div className="book-heading-copy"><button className="back-link" onClick={() => setView('booth')}><ArrowLeft size={15} /> Back to photos</button><h1>Your little <em>book.</em></h1></div>
+            <div className="book-heading-copy"><button className="back-link" onClick={() => setView('booth')}><ArrowLeft size={15} /> Back to photos</button><h1>Your <em>little</em> book</h1></div>
 
-            <div className="book-actions"><button className="button button-outline" onClick={() => fileInputRef.current?.click()}><Plus size={16} /> Add photos</button><button className="button button-primary" onClick={() => void saveBook()} disabled={saving}><Check size={16} /> {saving ? 'Saving…' : 'Save book'}</button><button className="button button-outline download-button" onClick={downloadBook}><Download size={16} /> Print</button></div>
+            <div className="book-actions"><button className="button button-outline" onClick={() => fileInputRef.current?.click()}><Plus size={16} /> Add photos</button><button className="button button-primary" onClick={() => void saveBook()} disabled={saving}><Check size={16} /> {saving ? 'Saving…' : 'Save book'}</button><button className="button button-outline download-button" onClick={() => void downloadBook()}><Download size={16} /> Print</button></div>
 
           </div>
 
-          <div className="book-title-row"><div className="book-title-input-wrap"><input className="book-title-input" aria-label="Photobook title" value={bookTitle} onChange={event => setBookTitle(event.target.value)} onBlur={() => void putMeta('bookTitle', bookTitle.trim() || 'piglet')} /><span className="title-rule" /></div><div className="book-meta"><span className="status-dot" /><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span></div></div>
-
-          
+          <div className="book-title-row"><div className="book-title-input-wrap"><input className="book-title-input" aria-label="Photobook title" value={bookTitle} onChange={event => setBookTitle(event.target.value)} /><span className="title-rule" /></div><div className="book-meta"><span className="status-dot" /><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span><span className={`auto-save-label auto-save-label--${autoSaveStatus}`} aria-live="polite">{autoSaveStatus === 'saving' ? 'Saving…' : autoSaveStatus === 'error' ? 'Not saved' : 'Saved automatically'}</span></div></div>
 
           <section className="page-design-controls no-print" aria-label="Scrapbook page designs">
+
             <div className="page-design-copy">
+
               <span className="eyebrow">PAGE DESIGNS</span>
+
               <strong>Choose a collage</strong>
+
             </div>
+
             <div className="page-design-mode" role="group" aria-label="Page design mode">
+
               <button type="button" className={pageTemplateMode === 'auto' ? 'selected' : ''} onClick={() => setPageTemplateMode('auto')}>Mix automatically</button>
+
               <button type="button" className={pageTemplateMode === 'manual' ? 'selected' : ''} onClick={() => setPageTemplateMode('manual')}>Choose designs</button>
+
             </div>
+
             {pageTemplateMode === 'manual' && <div className="page-template-selectors">
+
               {[shownPageStart - 1, shownPageStart].map((pageIndex, side) => {
+
                 const automaticId = AUTO_TEMPLATE_SEQUENCE[pageIndex % AUTO_TEMPLATE_SEQUENCE.length];
+
                 const selectedTemplate = pageTemplateOverrides[String(pageIndex)] ?? resolvedPages[pageIndex]?.template.id ?? automaticId;
+
                 return (
+
                   <label key={pageIndex} className="page-template-select-label">
+
                     <span>{side === 0 ? 'Left page' : 'Right page'} · {String(pageIndex + 1).padStart(2, '0')}</span>
+
                     <select value={selectedTemplate} onChange={event => choosePageTemplate(pageIndex, event.target.value as PageTemplateId)}>
+
                       {PAGE_TEMPLATES.map(template => <option key={template.id} value={template.id}>{template.name}</option>)}
+
                     </select>
+
                   </label>
+
                 );
+
               })}
+
             </div>}
+
           </section>
 
           <div className="book-stage-wrap">
@@ -1260,9 +1619,13 @@ useEffect(() => {
         <div className="print-cover"><div className="print-cover-kicker">piglet</div><Leaf size={44} strokeWidth={1} /><h1>{bookTitle}</h1><p>Photo scrapbook</p><span>✳</span></div>
 
         {Array.from({ length: totalPages }, (_, pageIndex) => (
+
         <Fragment key={`print-page-${pageIndex}`}>
+
           {renderPage(pageIndex, true)}
+
         </Fragment>
+
       ))}
 
       </div>
